@@ -16,7 +16,7 @@ namespace Aqar.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public IActionResult Index()
         {
             var response = _unitOfWork.Category.GetAll();
@@ -29,7 +29,7 @@ namespace Aqar.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost("add")]
         public IActionResult Create(Category category)
         {
             if (category is null)
@@ -48,7 +48,7 @@ namespace Aqar.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public IActionResult Edit(Category category, [FromRoute] int id)
         {
 
@@ -78,7 +78,7 @@ namespace Aqar.Controllers
         }
 
         //POST
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public IActionResult Delete(int id)
         {
             var category = _unitOfWork.Category.GetById(c => c.Id == id);

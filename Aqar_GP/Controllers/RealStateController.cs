@@ -22,7 +22,7 @@ namespace Aqar.controllers
         }
 
 
-        [HttpGet]
+        [HttpGet("all")]
         public IActionResult Index()
         {
             var response = _unitOfWork.Realstate.GetAll();
@@ -32,8 +32,19 @@ namespace Aqar.controllers
             }
             return Ok(response);
         }
+        
+        [HttpGet("status")]
+        public IActionResult Status(string status)
+        {
+            var response = _unitOfWork.Realstate.GetByStatus(status);
+            if (response.Count() == 0)
+            {
+                return BadRequest("RealState List is Empty");
+            }
+            return Ok(response);
+        }
 
-        [HttpPost]
+        [HttpPost("add")]
         public IActionResult Create(RealState realState)
         {
             if (realState is null)
@@ -50,7 +61,7 @@ namespace Aqar.controllers
 
             return BadRequest(ModelState);
         }
-        [HttpPut("{id}")]
+        [HttpPut("update/{id}")]
         public IActionResult Edit(RealState realState, [FromRoute] int id)
         {
 
@@ -80,7 +91,7 @@ namespace Aqar.controllers
         }
 
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public IActionResult Delete(int? id)
         {
             var realState = _unitOfWork.Realstate.GetById(realState => realState.Id == id);

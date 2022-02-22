@@ -13,31 +13,14 @@ namespace DataAccess.Respository
         {
             _db = db;
         }
-        public void AddNewRealState(RealState vm)
+       
+
+        public IEnumerable<RealState> GetByStatus(string status)
         {
-            var newRealstate = new RealState()
-            {
-                Title = vm.Title,
-                Description = vm.Description,
-                VideoLink = vm.VideoLink,
-                Address=vm.Address,
-                BuildingNumber = vm.BuildingNumber,
-                View=vm.View,
-                AppartmentNumber = vm.AppartmentNumber,
-                Area = vm.Area,
-                Rooms = vm.Rooms,
-                Baths = vm.Baths,
-                Price = vm.Price,
-                Status = vm.Status,
-                EmergencyExit = vm.EmergencyExit,
-                FirePlace = vm.FirePlace,
-                SwimmingPool = vm.SwimmingPool,
-                LaundryRoom = vm.LaundryRoom,
-                
-                CategoryId = vm.CategoryId
-            };
-            _db.RealStates.Add(newRealstate);
+            return _db.RealStates.Where(x => x.Status == status).ToList();
         }
+    
+
         public IEnumerable<RealState> SearchByID(int CatID, string st)
         {
             return _db.RealStates.Where(x => x.CategoryId == CatID && x.Address.State == st).ToList();
