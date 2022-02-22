@@ -4,6 +4,7 @@ using DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220222195215_aqarStep1")]
+    partial class aqarStep1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -49,15 +51,18 @@ namespace DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int?>("AppartmentNumber")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<double>("Area")
                         .HasColumnType("float");
 
                     b.Property<int?>("Baths")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("BuildingNumber")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -75,6 +80,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("Floor")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<bool>("LaundryRoom")
@@ -84,6 +90,7 @@ namespace DataAccess.Migrations
                         .HasColumnType("money");
 
                     b.Property<int?>("Rooms")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("Status")

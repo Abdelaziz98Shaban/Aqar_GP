@@ -9,7 +9,7 @@ namespace Models
 
         [Required(ErrorMessage = "Name Is Required"), 
             Display(Name = "Name"), 
-            StringLength(50), 
+            MaxLength(100), 
             RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
             ErrorMessage = "Name must be char only and more than 2 characters")]
         public string Title { get; set; }
@@ -17,7 +17,7 @@ namespace Models
         [Required(ErrorMessage = "Description Is Required"),
             Display(Name = "Description"),
             StringLength(300),
-            RegularExpression(pattern: @"[a-zA-Z0-9\s]{5,}",
+            RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
             ErrorMessage = "Description must be char only and more than 5 characters")]
         public string Description { get; set;}
         
@@ -39,18 +39,23 @@ namespace Models
 
         [Required]
         public FullAddress Address { get; set; }
-        [Required, Display(Name = "Building Number"), Range(1, 1000)]
-        public int BuildingNumber { get; set; }
 
 
-        [Required, Display(Name = "Appartment Number"), Range(1, 100)]
-        public int AppartmentNumber { get; set; }
+        [ Display(Name = "Floor"), Range(1, 300)]
+        public int? Floor { get; set; } 
+        
+        [Display(Name = "Building Number"), Range(1, 1000)]
+        public int? BuildingNumber { get; set; }
 
-        [Required, Range(1, 100)]
-        public int Rooms { get; set; }
 
-        [Required, Range(1, 30)]
-        public int Baths { get; set; }
+        [ Display(Name = "Appartment Number"), Range(1, 100)]
+        public int? AppartmentNumber { get; set; }
+
+        [ Range(1, 100)]
+        public int? Rooms { get; set; }
+
+        [ Range(1, 30)]
+        public int? Baths { get; set; }
 
         [Required, StringLength(50), RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
                           ErrorMessage = "Status must be char only and more than 2 characters")]
@@ -74,7 +79,7 @@ namespace Models
         [ForeignKey("Category")]
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
+        public virtual Category? Category { get; set; }
 
        
     }

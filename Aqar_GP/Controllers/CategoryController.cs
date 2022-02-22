@@ -2,11 +2,10 @@
 using DataAccess.Respository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using System.Web.Http;
 
 namespace Aqar.Controllers
 {
-    [Microsoft.AspNetCore.Components.Route("api/[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -17,23 +16,23 @@ namespace Aqar.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("all")]
-        public  IActionResult Index()
+        [HttpGet]
+        public IActionResult Index()
         {
             var response = _unitOfWork.Category.GetAll();
-            if(response.Count() == 0)
+            if (response.Count() == 0)
             {
                 return BadRequest("Category List is Empty");
             }
             return Ok(response);
         }
-        
-      
 
-        [Microsoft.AspNetCore.Mvc.HttpPost("Add")]
+
+
+        [HttpPost]
         public IActionResult Create(Category category)
         {
-            if(category is null)
+            if (category is null)
             {
                 return BadRequest("Could not Add Empty Category");
             }
@@ -41,7 +40,7 @@ namespace Aqar.Controllers
             {
                 _unitOfWork.Category.Add(category);
                 _unitOfWork.Save();
-                 return Ok(category);
+                return Ok(category);
 
             }
 
@@ -49,12 +48,14 @@ namespace Aqar.Controllers
         }
 
 
-        [Microsoft.AspNetCore.Mvc.HttpPost("Edit")]
-        public IActionResult Edit(Category category,[FromUri]int id)
+        [HttpPut("{id}")]
+        public IActionResult Edit(Category category, [FromRoute] int id)
         {
-            if(category is null)
+
+            if (category is null)
             {
                 return BadRequest("Please Enter Updated information");
+
             }
             if (id == category.Id)
             {
@@ -69,7 +70,7 @@ namespace Aqar.Controllers
             }
             else
             {
-                return BadRequest("No Category found with such an id");
+                return NotFound($"No category was found with ID: {id}");
 
             }
 
@@ -77,19 +78,19 @@ namespace Aqar.Controllers
         }
 
         //POST
-        [Microsoft.AspNetCore.Mvc.HttpPost("Delete")]
-        public IActionResult Delete(int? id)
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
         {
-            var obj = _unitOfWork.Category.GetById(c => c.Id == id);
-            if (obj == null)
+            var category = _unitOfWork.Category.GetById(c => c.Id == id);
+            if (category == null)
             {
-                return BadRequest("Category Not Found");
+                return NotFound($"No category was found with ID: {id}");
 
             }
 
-            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Category.Remove(category);
             _unitOfWork.Save();
-            return Ok("Category Deleted Successefully");
+            return Ok(category);
         }
 
     }

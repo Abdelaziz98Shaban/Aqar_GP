@@ -1,84 +1,100 @@
-﻿//using Aqar.DataAccess.Repository.IRepository;
-//using Aqar.Models.ViewModels;
-//using Aqar.Utility;
-//using DataAccess.Respository.IRepository;
-//using Microsoft.AspNetCore.Hosting;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Mvc;
-//using System;
-//using System.Collections.Generic;
-//using System.IO;
+﻿
+using DataAccess.Respository.IRepository;
 
-//namespace Aqar.Controllers
-//{
-//    public class RealStateController : Controller
-//    {
-//        private readonly IUnitOfWork _db;
-//        private readonly IWebHostEnvironment _webHostEnvironment;
+using Microsoft.AspNetCore.Mvc;
+using Models;
 
-//        public RealStateController(IUnitOfWork db, IWebHostEnvironment webHostEnvironment)
-//        {
-//            _db = db;
-//            _webHostEnvironment = webHostEnvironment;
-//        }
-//        public IActionResult Index()
-//        {
-//            return View(_db.Realstate.GetAll());
-//        }
 
-//        [HttpGet]
-//        public IActionResult Create()
-//        {
-//            return View(new Realstate());
-//        }
+namespace Aqar.controllers
+{
 
-//        [HttpPost]
-//        public IActionResult Create(RealStateVM realStateVM)
-//        {
-//            if (ModelState.IsValid)
-//            {
-//                if (realStateVM.ImageFiles != null)
-//                {
-//                    realStateVM.Images = new List<RealStateImagesVM>();
+    [Route("api/[controller]")]
+    [ApiController]
+    public class Realstatecontroller : ControllerBase
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webhostenvironment;
 
-//                    foreach (var file in realStateVM.ImageFiles)
-//                    {
-//                        var img = new RealStateImagesVM()
-//                        {
-//                            ImageUrl = UploadImage(file)
-//                        };
+        public Realstatecontroller(IUnitOfWork unitOfWork, IWebHostEnvironment webhostenvironment)
+        {
+            _unitOfWork = unitOfWork;
+            _webhostenvironment = webhostenvironment;
+        }
 
-//                        realStateVM.Images.Add(img);
-//                    }
-//                }
-//                _db.RealState.AddNewRealState(realStateVM);
-//                _db.Save();
-//                return RedirectToAction(nameof(Index));
-//            }
-//            return View(realStateVM);
-//        }
 
-//        private string UploadImage(IFormFile file)
-//        {
-//            string uniqueFileName = null;
+        [HttpGet]
+        public IActionResult Index()
+        {
+            var response = _unitOfWork.Realstate.GetAll();
+            if (response.Count() == 0)
+            {
+                return BadRequest("RealState List is Empty");
+            }
+            return Ok(response);
+        }
 
-//            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, SD.FileUploadFolder);
+        [HttpPost]
+        public IActionResult Create(RealState realState)
+        {
+            if (realState is null)
+            {
+                return BadRequest("Could not Add Empty RealState");
+            }
+            if (ModelState.IsValid)
+            {
+                _unitOfWork.Realstate.Add(realState);
+                _unitOfWork.Save();
+                return Ok(realState);
 
-//            uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
-//            if (!Directory.Exists(uploadsFolder))
-//            {
-//                Directory.CreateDirectory(uploadsFolder);
-//            }
-//            string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+            }
 
-//            using (var fileStream = new FileStream(filePath, FileMode.Create))
-//            {
-//                file.CopyTo(fileStream);
-//            }
+            return BadRequest(ModelState);
+        }
+        [HttpPut("{id}")]
+        public IActionResult Edit(RealState realState, [FromRoute] int id)
+        {
 
-//            //file.CopyTo(new FileStream(filePath, FileMode.Create));
+            if (realState is null)
+            {
+                return BadRequest("Please Enter Updated information");
 
-//            return uniqueFileName;
-//        }
-//    }
-//}
+            }
+            if (id == realState.Id)
+            {
+                if (ModelState.IsValid)
+                {
+                    _unitOfWork.Realstate.Update(realState);
+                    _unitOfWork.Save();
+                    return Ok(realState);
+
+                }
+
+            }
+            else
+            {
+                return NotFound($"No RealState was found with ID: {id}");
+
+            }
+
+            return BadRequest(ModelState);
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int? id)
+        {
+            var realState = _unitOfWork.Realstate.GetById(realState => realState.Id == id);
+            if (realState == null)
+            {
+                return NotFound($"No RealState was found with ID: {id}");
+
+            }
+
+            _unitOfWork.Realstate.Remove(realState);
+            _unitOfWork.Save();
+            return Ok(realState);
+        }
+
+
+    }
+}
