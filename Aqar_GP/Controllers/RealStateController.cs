@@ -1,6 +1,7 @@
 ﻿//using Aqar.DataAccess.Repository.IRepository;
 //using Aqar.Models.ViewModels;
 //using Aqar.Utility;
+//using DataAccess.Respository.IRepository;
 //using Microsoft.AspNetCore.Hosting;
 //using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@
 //using System.Collections.Generic;
 //using System.IO;
 
-//namespace AqarWeb.Areas.Admin.Controllers
+//namespace Aqar.Controllers
 //{
 //    public class RealStateController : Controller
 //    {
@@ -22,15 +23,15 @@
 //        }
 //        public IActionResult Index()
 //        {
-//            return View(_db.RealState.GetAll());
+//            return View(_db.Realstate.GetAll());
 //        }
 
 //        [HttpGet]
 //        public IActionResult Create()
 //        {
-//            return View(new RealStateVM());
+//            return View(new Realstate());
 //        }
-        
+
 //        [HttpPost]
 //        public IActionResult Create(RealStateVM realStateVM)
 //        {
@@ -50,9 +51,9 @@
 //                        realStateVM.Images.Add(img);
 //                    }
 //                }
-//                    _db.RealState.AddNewRealState(realStateVM);
-//                    _db.Save();
-//                    return RedirectToAction(nameof(Index));
+//                _db.RealState.AddNewRealState(realStateVM);
+//                _db.Save();
+//                return RedirectToAction(nameof(Index));
 //            }
 //            return View(realStateVM);
 //        }

@@ -2,10 +2,11 @@
 using DataAccess.Respository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using System.Web.Http;
 
 namespace Aqar.Controllers
 {
-    [Route("api/[controller]")]
+    [Microsoft.AspNetCore.Components.Route("api/[controller]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -16,7 +17,7 @@ namespace Aqar.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        [HttpGet("all")]
+        [Microsoft.AspNetCore.Mvc.HttpGet("all")]
         public  IActionResult Index()
         {
             var response = _unitOfWork.Category.GetAll();
@@ -26,12 +27,16 @@ namespace Aqar.Controllers
             }
             return Ok(response);
         }
-
+        
       
 
-        [HttpPost("AddCategory")]
+        [Microsoft.AspNetCore.Mvc.HttpPost("Add")]
         public IActionResult Create(Category category)
         {
+            if(category is null)
+            {
+                return BadRequest("Could not Add Empty Category");
+            }
             if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Add(category);
@@ -43,67 +48,49 @@ namespace Aqar.Controllers
             return BadRequest(ModelState);
         }
 
-        //public IActionResult Edit(int? id)
-        //{
-        //    if (id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
 
-        //    Category category = _unitOfWork.Category.GetById(c => c.Id == id);
+        [Microsoft.AspNetCore.Mvc.HttpPost("Edit")]
+        public IActionResult Edit(Category category,[FromUri]int id)
+        {
+            if(category is null)
+            {
+                return BadRequest("Please Enter Updated information");
+            }
+            if (id == category.Id)
+            {
+                if (ModelState.IsValid)
+                {
+                    _unitOfWork.Category.Update(category);
+                    _unitOfWork.Save();
+                    return Ok(category);
 
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(category);
-        //}
-        //[HttpPost]
-        //public IActionResult Edit(int? id, Category category)
-        //{
-        //    if (id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    if (ModelState.IsValid)
-        //    {
-        //        _unitOfWork.Category.Update(category);
-        //        _unitOfWork.Save();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(category);
-        //}
+                }
 
-        ////GET
-        //public IActionResult Delete(int? id)
-        //{
-        //    if (id == null || id == 0)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var category = _unitOfWork.Category.GetById(c => c.Id == id);
+            }
+            else
+            {
+                return BadRequest("No Category found with such an id");
 
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
+            }
 
-        //    return View(category);
-        //}
+            return BadRequest(ModelState);
+        }
 
-        ////POST
-        //[HttpPost, ActionName("Delete")]
-        //public IActionResult DeletePOST(int? id)
-        //{
-        //    var obj = _unitOfWork.Category.GetById(c => c.Id == id);
-        //    if (obj == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //POST
+        [Microsoft.AspNetCore.Mvc.HttpPost("Delete")]
+        public IActionResult Delete(int? id)
+        {
+            var obj = _unitOfWork.Category.GetById(c => c.Id == id);
+            if (obj == null)
+            {
+                return BadRequest("Category Not Found");
 
-        //    _unitOfWork.Category.Remove(obj);
-        //    _unitOfWork.Save();
-        //    return RedirectToAction("Index");
-        //}
+            }
+
+            _unitOfWork.Category.Remove(obj);
+            _unitOfWork.Save();
+            return Ok("Category Deleted Successefully");
+        }
+
     }
 }
