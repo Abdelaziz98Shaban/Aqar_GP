@@ -26,10 +26,7 @@ namespace Aqar.controllers
         public IActionResult Index()
         {
             var response = _unitOfWork.Realstate.GetAll();
-            if (response.Count() == 0)
-            {
-                return BadRequest("RealState List is Empty");
-            }
+            if (response.Count() == 0) return BadRequest("RealState List is Empty");
             return Ok(response);
         }
         
@@ -37,39 +34,26 @@ namespace Aqar.controllers
         public IActionResult Status(string status)
         {
             var response = _unitOfWork.Realstate.GetByStatus(status);
-            if (response.Count() == 0)
-            {
-                return BadRequest("RealState List is Empty");
-            }
+            if (response.Count() == 0) return BadRequest("RealState List is Empty");
             return Ok(response);
         }
 
         [HttpPost("add")]
         public IActionResult Create(RealState realState)
         {
-            if (realState is null)
-            {
-                return BadRequest("Could not Add Empty RealState");
-            }
+            if (realState is null) return BadRequest("Could not Add Empty RealState");
             if (ModelState.IsValid)
             {
                 _unitOfWork.Realstate.Add(realState);
                 _unitOfWork.Save();
-                return Ok(realState);
-
-            }
-
+                return Ok(realState);}
             return BadRequest(ModelState);
         }
         [HttpPut("update/{id}")]
         public IActionResult Edit(RealState realState, [FromRoute] int id)
         {
 
-            if (realState is null)
-            {
-                return BadRequest("Please Enter Updated information");
-
-            }
+            if (realState is null) return BadRequest("Please Enter Updated information");
             if (id == realState.Id)
             {
                 if (ModelState.IsValid)
@@ -81,12 +65,7 @@ namespace Aqar.controllers
                 }
 
             }
-            else
-            {
-                return NotFound($"No RealState was found with ID: {id}");
-
-            }
-
+            else return NotFound($"No RealState was found with ID: {id}");
             return BadRequest(ModelState);
         }
 
@@ -95,12 +74,7 @@ namespace Aqar.controllers
         public IActionResult Delete(int? id)
         {
             var realState = _unitOfWork.Realstate.GetById(realState => realState.Id == id);
-            if (realState == null)
-            {
-                return NotFound($"No RealState was found with ID: {id}");
-
-            }
-
+            if (realState == null) return NotFound($"No RealState was found with ID: {id}");
             _unitOfWork.Realstate.Remove(realState);
             _unitOfWork.Save();
             return Ok(realState);
@@ -110,7 +84,6 @@ namespace Aqar.controllers
         public IActionResult ContactOwner(int Id)
         {
             Transactions transaction = new Transactions();
-
             transaction.RealstateId = Id;
             transaction.Date = DateTime.UtcNow;
             transaction.RealState = _unitOfWork.Realstate.GetById(x=> x.Id == Id);

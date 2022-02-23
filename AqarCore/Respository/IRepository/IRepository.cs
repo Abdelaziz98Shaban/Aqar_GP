@@ -4,9 +4,9 @@ namespace DataAccess.Respository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll();
+       Task<IEnumerable<T>> GetAll();
 
-        T GetById(Expression<Func<T, bool>> expression);
+        Task<T> GetById(Expression<Func<T, bool>> expression);
 
         void Add(T entity);
 

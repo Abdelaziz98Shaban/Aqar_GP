@@ -13,7 +13,7 @@ namespace DataAccess.Respository
         {
             _db = db;
             Category= new CategoryRespository(_db);
-            Realstate = new RealstateRepository(_db);
+            Realstate = new RealStateRepository(_db);
             Transactions = new TransactionsRepository(_db);
         }
         public ICategoryRepository Category { get; private set; }
