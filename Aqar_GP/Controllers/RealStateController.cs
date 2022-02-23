@@ -106,6 +106,21 @@ namespace Aqar.controllers
             return Ok(realState);
         }
 
+        [HttpPost("AddTransaction")]
+        public IActionResult ContactOwner(int Id)
+        {
+            Transactions transaction = new Transactions();
+
+            transaction.RealstateId = Id;
+            transaction.Date = DateTime.UtcNow;
+            transaction.RealState = _unitOfWork.Realstate.GetById(x=> x.Id == Id);
+            _unitOfWork.Transactions.Add(transaction);
+            _unitOfWork.Save();
+            return Ok();
+
+
+        }
+
 
     }
 }

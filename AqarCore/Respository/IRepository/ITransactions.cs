@@ -1,9 +1,9 @@
 ﻿
-using System.Transactions;
+using Models;
 
 namespace DataAccess.Respository.IRepository
 {
-    public interface ITransactions : IRepository<Transaction>
+    public interface ITransactions : IRepository<Transactions>
     {
 
     }
