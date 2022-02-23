@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.viewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,8 @@ namespace DataAccess.Respository.IRepository
 
         IEnumerable<RealState> SearchByID(int CatID, string type);
         IEnumerable<RealState> GetByStatus(string status);
-       
+
+        IEnumerable<RealState> SearchByProp(RealStateVm prop);
 
 
     }
