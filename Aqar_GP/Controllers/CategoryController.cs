@@ -17,12 +17,12 @@ namespace Aqar.Controllers
         }
 
         [HttpGet("all")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var response = _unitOfWork.Category.GetAll();
+            var response = await _unitOfWork.Category.GetAll();
             if (response.Count() == 0)
             {
-                return BadRequest("Category List is Empty");
+                return  BadRequest("Category List is Empty");
             }
             return Ok(response);
         }
@@ -79,9 +79,9 @@ namespace Aqar.Controllers
 
         //POST
         [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var category = _unitOfWork.Category.GetById(c => c.Id == id);
+            var category = await _unitOfWork.Category.GetById(c => c.Id == id);
             if (category == null)
             {
                 return NotFound($"No category was found with ID: {id}");

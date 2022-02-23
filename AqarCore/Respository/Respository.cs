@@ -21,15 +21,15 @@ namespace DataAccess.Respository
             dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return dbSet.ToList();
+            return await dbSet.ToListAsync();
 
         }
 
-        public T GetById(Expression<Func<T, bool>> expression)
+        public async Task<T> GetById(Expression<Func<T, bool>> expression)
         {
-            return dbSet.FirstOrDefault(expression);
+            return await dbSet.FirstOrDefaultAsync(expression);
         }
 
         public void Remove(T entity)

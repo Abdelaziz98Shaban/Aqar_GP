@@ -18,9 +18,9 @@ namespace Aqar_GP.Controllers
             _webhostenvironment = webhostenvironment;
         }
         [HttpPost]
-        public IActionResult Search(RealStateVm param)
+        public async Task<IActionResult> Search(RealStateVm param)
         {
-            var result = _unitOfWork.Realstate.SearchByProp(param);
+            var result = await _unitOfWork.Realstate.SearchByProp(param);
             if(result.Count() == 0)
             {
                 return NotFound("no result found");

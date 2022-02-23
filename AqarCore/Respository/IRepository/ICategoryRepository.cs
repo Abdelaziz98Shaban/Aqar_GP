@@ -4,6 +4,6 @@ namespace DataAccess.Respository.IRepository
 {
     public interface ICategoryRepository : IRepository<Category>
     {
-        void Update(Category cat);
+      public void Update(Category cat);
     }
 }

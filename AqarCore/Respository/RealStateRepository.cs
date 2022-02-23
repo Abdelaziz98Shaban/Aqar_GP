@@ -7,30 +7,30 @@ using Models.viewModel;
 
 namespace DataAccess.Respository
 {
-    public class RealstateRepository : Repository<RealState>, IRealstateRepository
+    public class RealStateRepository : Repository<RealState>, IRealstateRepository
     {
         private readonly ApplicationDbContext _db;
 
-        public RealstateRepository(ApplicationDbContext db) : base(db)
+        public RealStateRepository(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
        
 
-        public IEnumerable<RealState> GetByStatus(string status)
+        public async Task<IEnumerable<RealState>> GetByStatus(string status)
         {
-            return _db.RealStates.Where(x => x.Status == status).ToList();
+            return await _db.RealStates.Where(x => x.Status == status).ToListAsync();
         }
     
 
-        public IEnumerable<RealState> SearchByID(int CatID, string st)
+        public async Task<IEnumerable<RealState>> SearchByID(int CatID, string st)
         {
-            return _db.RealStates.Where(x => x.CategoryId == CatID && x.Address.State == st).ToList();
+            return  await _db.RealStates.Where(x => x.CategoryId == CatID && x.Address.State == st).ToListAsync();
         }
 
 
 
-        public IEnumerable<RealState> SearchByProp(RealStateVm prop )
+        public async Task<IEnumerable<RealState> >SearchByProp(RealStateVm prop )
         {
             string query = $"SELECT * FROM RealStates WHERE ";
             query += $"Status='{prop.Status}' ";
@@ -41,7 +41,7 @@ namespace DataAccess.Respository
             if (prop.Floor != 0) query += $"AND Floor ='{prop.Floor}' ";
             query += $"AND Area BETWEEN ${prop.minArea} and ${prop.maxArea} ";
             query += $"AND Price BETWEEN ${prop.minPrice} and ${prop.maxPrice} ";
-            return  _db.RealStates.FromSqlRaw(query).ToList();
+            return await _db.RealStates.FromSqlRaw(query).ToListAsync();
 
         }
 
