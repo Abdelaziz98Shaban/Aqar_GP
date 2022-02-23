@@ -30,8 +30,8 @@ namespace Models
         [Display(Name = "Video Link"), StringLength(200)]
         public string? VideoLink { get; set; }
 
-        [Display(Name = "View"), StringLength(200)]
-        public string? View { get; set; }
+        [Display(Name = "BuildingView"), StringLength(200)]
+        public string? BuildingView { get; set; }
         [Display(Name = "Area"),
             Required,
             Range(40, 300000000)]
