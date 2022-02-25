@@ -1,32 +1,33 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Models
+namespace Models.viewModel
 {
-    public class RealState
+    public class RealStateVModel
     {
-        public int Id { get; set; }
-
-        [Required(ErrorMessage = "Name Is Required"), 
-            Display(Name = "Name"), 
-            MaxLength(100), 
-            RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
-            ErrorMessage = "Name must be char only and more than 2 characters")]
+        [Required(ErrorMessage = "Name Is Required"),
+          MaxLength(100),
+          RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
+          ErrorMessage = "Name must be char only and more than 2 characters")]
         public string Title { get; set; }
 
-        public byte[] Image { get; set; }
+        public IFormFile Image { get; set; }
 
         [Required(ErrorMessage = "Description Is Required"),
-            Display(Name = "Description"),
+            
             StringLength(300),
             RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
             ErrorMessage = "Description must be char only and more than 5 characters")]
-        public string Description { get; set;}
-        
+        public string Description { get; set; }
+
         [Required(ErrorMessage = "Price Is Required"),
-            Display(Name = "Price"),
-            Column(TypeName = "money"),
-            Range(minimum:500,maximum:Double.MaxValue)]
+           
+            Range(minimum: 500, maximum: Double.MaxValue)]
         public decimal Price { get; set; }
 
         [Display(Name = "Video Link"), StringLength(200)]
@@ -43,20 +44,20 @@ namespace Models
         public FullAddress Address { get; set; }
 
 
-        [ Display(Name = "Floor"), Range(1, 300)]
-        public int? Floor { get; set; } 
-        
+        [Display(Name = "Floor"), Range(1, 300)]
+        public int? Floor { get; set; }
+
         [Display(Name = "Building Number"), Range(1, 1000)]
         public int? BuildingNumber { get; set; }
 
 
-        [ Display(Name = "Appartment Number"), Range(1, 100)]
+        [Display(Name = "Appartment Number"), Range(1, 100)]
         public int? AppartmentNumber { get; set; }
 
-        [ Range(1, 100)]
+        [Range(1, 100)]
         public int? Rooms { get; set; }
 
-        [ Range(1, 30)]
+        [Range(1, 30)]
         public int? Baths { get; set; }
 
         [Required, StringLength(50), RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
@@ -78,11 +79,7 @@ namespace Models
         [Display(Name = "Fire Place"), Required(ErrorMessage = "Fire Place Is Required")]
         public bool FirePlace { get; set; }
 
-        [ForeignKey("Category")]
-
+        [Required]
         public int CategoryId { get; set; }
-        public virtual Category? Category { get; set; }
-
-       
     }
 }

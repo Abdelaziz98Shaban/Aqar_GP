@@ -30,7 +30,7 @@ namespace DataAccess.Respository
 
 
 
-        public async Task<IEnumerable<RealState> >SearchByProp(RealStateVm prop )
+        public async Task<IEnumerable<RealState> >SearchByProp(RealStateSearchVM prop )
         {
             string query = $"SELECT * FROM RealStates WHERE ";
             query += $"Status='{prop.Status}' ";

@@ -1,8 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace Models.viewModel
 {
-    public class RealStateVm
+    public class RealStateSearchVM
     {
         public string Status { get; set; }
         public decimal minPrice { get; set; }

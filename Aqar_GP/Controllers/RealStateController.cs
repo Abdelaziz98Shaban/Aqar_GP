@@ -3,7 +3,7 @@ using DataAccess.Respository.IRepository;
 
 using Microsoft.AspNetCore.Mvc;
 using Models;
-
+using Models.viewModel;
 
 namespace Aqar.controllers
 {
@@ -13,42 +13,90 @@ namespace Aqar.controllers
     public class Realstatecontroller : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webhostenvironment;
-
+        private new List<string> _allowedExtenstions = new List<string> { ".jpg", ".png" };
+        private long _maxAllowedPosterSize = 1048576;
         public Realstatecontroller(IUnitOfWork unitOfWork, IWebHostEnvironment webhostenvironment)
         {
             _unitOfWork = unitOfWork;
-            _webhostenvironment = webhostenvironment;
         }
 
 
         [HttpGet("all")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var response = _unitOfWork.Realstate.GetAll();
-            if (response.Count() == 0) return BadRequest("RealState List is Empty");
-            return Ok(response);
-        }
-        
-        [HttpGet("status")]
-        public IActionResult Status(string status)
-        {
-            var response = _unitOfWork.Realstate.GetByStatus(status);
+            var response = await _unitOfWork.Realstate.GetAll();
             if (response.Count() == 0) return BadRequest("RealState List is Empty");
             return Ok(response);
         }
 
-        [HttpPost("add")]
-        public IActionResult Create(RealState realState)
+        [HttpGet("status")]
+        public async Task<IActionResult> Status(string status)
         {
-            if (realState is null) return BadRequest("Could not Add Empty RealState");
-            if (ModelState.IsValid)
-            {
-                _unitOfWork.Realstate.Add(realState);
-                _unitOfWork.Save();
-                return Ok(realState);}
-            return BadRequest(ModelState);
+            var response = await _unitOfWork.Realstate.GetByStatus(status);
+            if (response.Count() == 0) return BadRequest("RealState List is Empty");
+            return Ok(response);
         }
+
+
+
+
+
+        [HttpPost("add")]
+        public async Task<IActionResult> CreateAsync([FromForm] RealStateVModel realVm)
+        {
+            if (realVm.Image == null)
+                return BadRequest("Poster is required!");
+
+            if (!_allowedExtenstions.Contains(Path.GetExtension(realVm.Image.FileName).ToLower()))
+                return BadRequest("Only .png and .jpg images are allowed!");
+
+            if (realVm.Image.Length > _maxAllowedPosterSize)
+                return BadRequest("Max allowed size for poster is 1MB!");
+
+            var isValidGenre = await _unitOfWork.Category.IsvalidCategory(realVm.CategoryId);
+
+            if (!isValidGenre)
+                return BadRequest("Invalid genere ID!");
+            if (!ModelState.IsValid)
+                
+            return BadRequest(ModelState);
+           
+
+            using var dataStream = new MemoryStream();
+
+            await realVm.Image.CopyToAsync(dataStream);
+
+            var newRealState = new RealState {
+                Title = realVm.Title,
+                Description = realVm.Description,
+                Price = realVm.Price,
+                VideoLink = realVm.VideoLink,
+                BuildingView = realVm.BuildingView,
+                Area = realVm.Area,
+                Address = realVm.Address,
+                Floor = realVm.Floor,
+                BuildingNumber = realVm.BuildingNumber,
+                AppartmentNumber = realVm.AppartmentNumber,
+                Rooms = realVm.Rooms,
+                Baths = realVm.Baths,
+                Status = realVm.Status,
+                SwimmingPool = realVm.SwimmingPool,
+                LaundryRoom = realVm.LaundryRoom,
+                EmergencyExit = realVm.EmergencyExit,
+                FirePlace = realVm.FirePlace,
+                CategoryId = realVm.CategoryId,
+            };
+            newRealState.Image = dataStream.ToArray();
+
+            _unitOfWork.Realstate.Add(newRealState);
+            _unitOfWork.Save();
+            return Ok(newRealState);
+        }
+
+
+
+
+
         [HttpPut("update/{id}")]
         public IActionResult Edit(RealState realState, [FromRoute] int id)
         {
@@ -71,9 +119,9 @@ namespace Aqar.controllers
 
 
         [HttpDelete("delete/{id}")]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
-            var realState = _unitOfWork.Realstate.GetById(realState => realState.Id == id);
+            var realState = await _unitOfWork.Realstate.GetById(realState => realState.Id == id);
             if (realState == null) return NotFound($"No RealState was found with ID: {id}");
             _unitOfWork.Realstate.Remove(realState);
             _unitOfWork.Save();
@@ -81,12 +129,12 @@ namespace Aqar.controllers
         }
 
         [HttpPost("AddTransaction")]
-        public IActionResult ContactOwner(int Id)
+        public async Task<IActionResult> ContactOwner(int Id)
         {
             Transactions transaction = new Transactions();
             transaction.RealstateId = Id;
             transaction.Date = DateTime.UtcNow;
-            transaction.RealState = _unitOfWork.Realstate.GetById(x=> x.Id == Id);
+            transaction.RealState = await _unitOfWork.Realstate.GetById(x => x.Id == Id);
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Save();
             return Ok();

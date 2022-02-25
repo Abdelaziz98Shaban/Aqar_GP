@@ -1,5 +1,6 @@
 ﻿
 using DataAccess.Data;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace DataAccess.Respository.IRepository
@@ -15,6 +16,11 @@ namespace DataAccess.Respository.IRepository
         public void Update(Category obj)
         {
             _db.Category.Update(obj);
+        }
+
+        public Task<bool> IsvalidCategory(int id)
+        {
+            return _db.Category.AnyAsync(cat => cat.Id == id);
         }
     }
 }

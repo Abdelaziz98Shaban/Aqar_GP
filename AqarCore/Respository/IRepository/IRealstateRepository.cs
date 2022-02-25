@@ -15,7 +15,7 @@ namespace DataAccess.Respository.IRepository
         Task<IEnumerable<RealState>> SearchByID(int CatID, string type);
         Task<IEnumerable<RealState>> GetByStatus(string status);
 
-       Task<IEnumerable<RealState>> SearchByProp(RealStateVm prop);
+       Task<IEnumerable<RealState>> SearchByProp(RealStateSearchVM prop);
 
 
     }

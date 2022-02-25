@@ -10,15 +10,13 @@ namespace Aqar_GP.Controllers
     public class SearchController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webhostenvironment;
 
         public SearchController(IUnitOfWork unitOfWork, IWebHostEnvironment webhostenvironment)
         {
             _unitOfWork = unitOfWork;
-            _webhostenvironment = webhostenvironment;
         }
         [HttpPost]
-        public async Task<IActionResult> Search(RealStateVm param)
+        public async Task<IActionResult> Search(RealStateSearchVM param)
         {
             var result = await _unitOfWork.Realstate.SearchByProp(param);
             if(result.Count() == 0)
