@@ -29,7 +29,7 @@ namespace Aqar.controllers
             return Ok(response);
         }
 
-        [HttpGet("status")]
+        [HttpGet("searchBystatus")]
         public async Task<IActionResult> Status(string status)
         {
             var response = await _unitOfWork.Realstate.GetByStatus(status);
@@ -66,7 +66,6 @@ namespace Aqar.controllers
             await realVm.Image.CopyToAsync(dataStream);
 
             var newRealState = new RealState {
-                //Id = Guid.NewGuid().ToString(),
                 Title = realVm.Title,
                 Description = realVm.Description,
                 Price = realVm.Price,
@@ -99,17 +98,55 @@ namespace Aqar.controllers
 
 
         [HttpPut("update/{id}")]
-        public IActionResult Edit(RealState realState, [FromRoute] int id)
+        public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id)
         {
+            if (realVm.Image == null)
+                return BadRequest("Poster is required!");
 
-            if (realState is null) return BadRequest("Please Enter Updated information");
-            if (id == int.Parse(realState.Id))
+            if (!_allowedExtenstions.Contains(Path.GetExtension(realVm.Image.FileName).ToLower()))
+                return BadRequest("Only .png and .jpg images are allowed!");
+
+            if (realVm.Image.Length > _maxAllowedPosterSize)
+                return BadRequest("Max allowed size for poster is 1MB!");
+
+
+            if (realVm is null) return BadRequest("Please Enter Updated information");
+
+            var real = await _unitOfWork.Realstate.GetById(real=>real.Id == id);
+            if (real is not null)
             {
                 if (ModelState.IsValid)
                 {
-                    _unitOfWork.Realstate.Update(realState);
+                    using var dataStream = new MemoryStream();
+
+                    await realVm.Image.CopyToAsync(dataStream);
+
+
+
+                    real.Title = realVm.Title;
+                    real.Description = realVm.Description;
+                    real.Price = realVm.Price;
+                    real.VideoLink = realVm.VideoLink;
+                    real.BuildingView = realVm.BuildingView;
+                    real.Area = realVm.Area;
+                    real.Address = realVm.Address;
+                    real.Floor = realVm.Floor;
+                    real.BuildingNumber = realVm.BuildingNumber;
+                    real.AppartmentNumber = realVm.AppartmentNumber;
+                    real.Rooms = realVm.Rooms;
+                    real.Baths = realVm.Baths;
+                    real.Status = realVm.Status;
+                    real.SwimmingPool = realVm.SwimmingPool;
+                    real.LaundryRoom = realVm.LaundryRoom;
+                    real.EmergencyExit = realVm.EmergencyExit;
+                    real.FirePlace = realVm.FirePlace;
+                    real.CategoryId = realVm.CategoryId;
+                    real.UserId = realVm.userId;
+                    
+                    real.Image = dataStream.ToArray();
+                    _unitOfWork.Realstate.Update(real);
                     _unitOfWork.Save();
-                    return Ok(realState);
+                    return Ok(real);
 
                 }
 
@@ -120,9 +157,9 @@ namespace Aqar.controllers
 
 
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var realState = await _unitOfWork.Realstate.GetById(realState => int.Parse(realState.Id) == id);
+            var realState = await _unitOfWork.Realstate.GetById(realState => realState.Id == id);
             if (realState == null) return NotFound($"No RealState was found with ID: {id}");
             _unitOfWork.Realstate.Remove(realState);
             _unitOfWork.Save();
@@ -130,13 +167,13 @@ namespace Aqar.controllers
         }
 
         [HttpPost("AddTransaction")]
-        public async Task<IActionResult> ContactOwner(int RealStateId,int userID)
+        public async Task<IActionResult> ContactOwner(string RealStateId,string userID)
         {
             Transactions transaction = new Transactions();
-            transaction.RealstateId = RealStateId.ToString();
-            transaction.UserId = userID.ToString();
+            transaction.RealstateId = RealStateId;
+            transaction.UserId = userID;
             transaction.Date = DateTime.UtcNow;
-            transaction.RealState = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
+            transaction.RealState = await _unitOfWork.Realstate.GetById(x => x.Id== RealStateId);
             //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Save();

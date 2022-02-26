@@ -12,7 +12,13 @@ namespace DataAccess.Respository.IRepository
         {
             _db = db;
         }
+        
 
+        public  async Task<IEnumerable<Category>> GetAllCategories()
+        {
+            return await _db.Category.OrderBy(cat=>cat.Name).ToListAsync();
+
+        }
         public void Update(Category obj)
         {
             _db.Category.Update(obj);

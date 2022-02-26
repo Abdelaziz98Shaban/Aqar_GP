@@ -1,6 +1,7 @@
 ﻿
 using DataAccess.Respository.IRepository;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using Models;
 
 namespace Aqar.Controllers
@@ -19,7 +20,7 @@ namespace Aqar.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> Index()
         {
-            var response = await _unitOfWork.Category.GetAll();
+            var response = await _unitOfWork.Category.GetAllCategories();
             if (response.Count() == 0)
             {
                 return  BadRequest("Category List is Empty");
@@ -51,7 +52,7 @@ namespace Aqar.Controllers
 
 
         [HttpPut("update/{id}")]
-        public IActionResult Edit(Category category, [FromRoute] int id)
+        public IActionResult Edit(Category category, [FromRoute] string id)
         {
 
             if (category is null)
@@ -59,7 +60,7 @@ namespace Aqar.Controllers
                 return BadRequest("Please Enter Updated information");
 
             }
-            if (id ==int.Parse( category.Id))
+            if (id == category.Id)
             {
                 if (ModelState.IsValid)
                 {
@@ -81,9 +82,9 @@ namespace Aqar.Controllers
 
         //POST
         [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            var category = await _unitOfWork.Category.GetById(c => int.Parse(c.Id )== id);
+            var category = await _unitOfWork.Category.GetById(c => c.Id == id);
             if (category == null)
             {
                 return NotFound($"No category was found with ID: {id}");
