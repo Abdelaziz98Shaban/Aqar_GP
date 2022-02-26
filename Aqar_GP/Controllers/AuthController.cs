@@ -1,4 +1,5 @@
 ﻿using DataAccess.Respository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.viewModel;
 
@@ -6,6 +7,7 @@ namespace Aqar_GP.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class AuthController : Controller
     {
 
@@ -44,7 +46,7 @@ namespace Aqar_GP.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("addrole")]
         public async Task<IActionResult> AddRoleAsync([FromBody] AddRoleViewModel model)
         {

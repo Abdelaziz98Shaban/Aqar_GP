@@ -70,9 +70,11 @@ namespace DataAccess.Respository
             };
         }
 
-        public void update(ApplicationUser User)
+        public  void update(ApplicationUser User)
         {
-            _db.Users.Update(User);
+
+             _db.Users.Update(User);
+           
         }
 
 

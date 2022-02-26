@@ -3,11 +3,13 @@ using DataAccess.Respository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Aqar.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize (Roles = "Admin")]
     public class CategoryController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
