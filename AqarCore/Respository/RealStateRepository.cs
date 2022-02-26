@@ -25,7 +25,7 @@ namespace DataAccess.Respository
 
         public async Task<IEnumerable<RealState>> SearchByID(int CatID, string st)
         {
-            return  await _db.RealStates.Where(x => x.CategoryId == CatID && x.Address.State == st).ToListAsync();
+            return  await _db.RealStates.Where(x => int.Parse(x.CategoryId)== CatID && x.Address.State == st).ToListAsync();
         }
 
 

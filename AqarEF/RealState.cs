@@ -5,7 +5,8 @@ namespace Models
 {
     public class RealState
     {
-        public int Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "Name Is Required"), 
             Display(Name = "Name"), 
@@ -80,9 +81,15 @@ namespace Models
 
         [ForeignKey("Category")]
 
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
         public virtual Category? Category { get; set; }
 
-       
+
+            [ForeignKey("ApplicationUser")]
+
+            public string UserId { get; set; }
+            public virtual ApplicationUser? ApplicationUser { get; set; }
+
+
     }
 }

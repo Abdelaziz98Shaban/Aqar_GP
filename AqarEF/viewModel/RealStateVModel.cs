@@ -80,6 +80,9 @@ namespace Models.viewModel
         public bool FirePlace { get; set; }
 
         [Required]
-        public int CategoryId { get; set; }
+        public string CategoryId { get; set; }
+
+        [Required]
+        public string userId { get; set; }
     }
 }

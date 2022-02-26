@@ -58,7 +58,6 @@ namespace Aqar.controllers
             if (!isValidGenre)
                 return BadRequest("Invalid genere ID!");
             if (!ModelState.IsValid)
-                
             return BadRequest(ModelState);
            
 
@@ -67,6 +66,7 @@ namespace Aqar.controllers
             await realVm.Image.CopyToAsync(dataStream);
 
             var newRealState = new RealState {
+                //Id = Guid.NewGuid().ToString(),
                 Title = realVm.Title,
                 Description = realVm.Description,
                 Price = realVm.Price,
@@ -85,6 +85,7 @@ namespace Aqar.controllers
                 EmergencyExit = realVm.EmergencyExit,
                 FirePlace = realVm.FirePlace,
                 CategoryId = realVm.CategoryId,
+                UserId = realVm.userId,
             };
             newRealState.Image = dataStream.ToArray();
 
@@ -102,7 +103,7 @@ namespace Aqar.controllers
         {
 
             if (realState is null) return BadRequest("Please Enter Updated information");
-            if (id == realState.Id)
+            if (id == int.Parse(realState.Id))
             {
                 if (ModelState.IsValid)
                 {
@@ -121,7 +122,7 @@ namespace Aqar.controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int? id)
         {
-            var realState = await _unitOfWork.Realstate.GetById(realState => realState.Id == id);
+            var realState = await _unitOfWork.Realstate.GetById(realState => int.Parse(realState.Id) == id);
             if (realState == null) return NotFound($"No RealState was found with ID: {id}");
             _unitOfWork.Realstate.Remove(realState);
             _unitOfWork.Save();
@@ -129,12 +130,14 @@ namespace Aqar.controllers
         }
 
         [HttpPost("AddTransaction")]
-        public async Task<IActionResult> ContactOwner(int Id)
+        public async Task<IActionResult> ContactOwner(int RealStateId,int userID)
         {
             Transactions transaction = new Transactions();
-            transaction.RealstateId = Id;
+            transaction.RealstateId = RealStateId.ToString();
+            transaction.UserId = userID.ToString();
             transaction.Date = DateTime.UtcNow;
-            transaction.RealState = await _unitOfWork.Realstate.GetById(x => x.Id == Id);
+            transaction.RealState = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
+            //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Save();
             return Ok();

@@ -31,11 +31,13 @@ namespace Aqar.Controllers
 
         [HttpPost("add")]
         public IActionResult Create(Category category)
-        {
+        { 
+            //category.Id= Guid.NewGuid().ToString();
             if (category is null)
             {
                 return BadRequest("Could not Add Empty Category");
             }
+           
             if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Add(category);
@@ -57,7 +59,7 @@ namespace Aqar.Controllers
                 return BadRequest("Please Enter Updated information");
 
             }
-            if (id == category.Id)
+            if (id ==int.Parse( category.Id))
             {
                 if (ModelState.IsValid)
                 {
@@ -81,7 +83,7 @@ namespace Aqar.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _unitOfWork.Category.GetById(c => c.Id == id);
+            var category = await _unitOfWork.Category.GetById(c => int.Parse(c.Id )== id);
             if (category == null)
             {
                 return NotFound($"No category was found with ID: {id}");

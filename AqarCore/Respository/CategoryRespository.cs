@@ -18,7 +18,7 @@ namespace DataAccess.Respository.IRepository
             _db.Category.Update(obj);
         }
 
-        public Task<bool> IsvalidCategory(int id)
+        public Task<bool> IsvalidCategory(string id)
         {
             return _db.Category.AnyAsync(cat => cat.Id == id);
         }
