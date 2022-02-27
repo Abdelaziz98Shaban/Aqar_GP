@@ -6,6 +6,7 @@ namespace DataAccess.Respository.IRepository
         ICategoryRepository Category{ get; }
         IRealstateRepository Realstate { get; }
         ITransactions Transactions { get; }
+        IFavoriteList FavoriteList { get; }
         IUserRepo Users { get; }
         void Save();
     }

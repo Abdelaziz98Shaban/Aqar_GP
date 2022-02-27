@@ -254,6 +254,24 @@ namespace DataAccess.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Models.FavoriteList", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("RealstateId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("UserId", "RealstateId");
+
+                    b.HasIndex("RealstateId");
+
+                    b.ToTable("FavoriteList");
+                });
+
             modelBuilder.Entity("Models.RealState", b =>
                 {
                     b.Property<string>("Id")
@@ -404,6 +422,25 @@ namespace DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Models.FavoriteList", b =>
+                {
+                    b.HasOne("Models.RealState", "RealState")
+                        .WithMany()
+                        .HasForeignKey("RealstateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("RealState");
                 });
 
             modelBuilder.Entity("Models.RealState", b =>

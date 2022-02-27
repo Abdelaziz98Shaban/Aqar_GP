@@ -180,8 +180,23 @@ namespace Aqar.controllers
             return Ok();
 
 
+        }      
+        [HttpPost("AddFavorite")]
+        public async Task<IActionResult> FavoriteList(string RealStateId,string userID)
+        {
+            FavoriteList List = new FavoriteList();
+            List.RealstateId = RealStateId;
+            List.UserId = userID;
+            List.Date = DateTime.UtcNow;
+            List.RealState = await _unitOfWork.Realstate.GetById(x => x.Id== RealStateId);
+            //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
+            _unitOfWork.FavoriteList.Add(List);
+            _unitOfWork.Save();
+            return Ok();
+
+
         }
 
-
+       
     }
 }

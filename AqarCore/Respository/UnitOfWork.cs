@@ -21,12 +21,14 @@ namespace DataAccess.Respository
             Category= new CategoryRespository(_db);
             Realstate = new RealStateRepository(_db);
             Transactions = new TransactionsRepository(_db);
+            FavoriteList = new FavoriteRepo(_db);
             Users = new UserRepo(_db, userManager,roleManager,jwt);
         }
         public ICategoryRepository Category { get; private set; }
         public IRealstateRepository Realstate { get; private set; }
         public ITransactions Transactions { get; private set; }
         public IUserRepo Users { get; private set; }
+        public IFavoriteList FavoriteList { get; private set; }
 
         
 
