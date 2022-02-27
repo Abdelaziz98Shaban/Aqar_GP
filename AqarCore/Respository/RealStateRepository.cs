@@ -47,6 +47,13 @@ namespace DataAccess.Respository
 
         }
 
+        public List<FavoriteList> favoriteLists(string userId)
+        {
+            string query = $"SELECT * FROM FavoriteList WHERE ";
+            if (userId != null) query += $"WHERE UserId ='{userId}'";
+            return _db.FavoriteList.FromSqlRaw(query).ToList();
+
+        }
         public void Update(RealState obj)
         {
             _db.RealStates.Update(obj);

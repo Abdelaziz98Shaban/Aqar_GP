@@ -182,7 +182,7 @@ namespace Aqar.controllers
 
         }      
         [HttpPost("AddFavorite")]
-        public async Task<IActionResult> FavoriteList(string RealStateId,string userID)
+        public async Task<IActionResult> AddToFavorite(string RealStateId,string userID)
         {
             FavoriteList List = new FavoriteList();
             List.RealstateId = RealStateId;
@@ -193,10 +193,16 @@ namespace Aqar.controllers
             _unitOfWork.FavoriteList.Add(List);
             _unitOfWork.Save();
             return Ok();
-
-
         }
 
+        public IActionResult ShowFavourite(string UserId)
+        {
+
+           var result =  _unitOfWork.Realstate.favoriteLists(UserId);
+                if(result != null) return Ok(result);
+                return BadRequest("No Favourites Added");
+            
+        }
        
     }
 }
