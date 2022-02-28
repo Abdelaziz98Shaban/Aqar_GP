@@ -41,12 +41,16 @@ namespace DataAccess.Respository
 
         }
 
-        public List<FavoriteList> favoriteLists(string userId)
+        public List<RealState> favoriteLists(string userId)
         {
-            string query = $"SELECT * FROM FavoriteList WHERE ";
-            if (userId != null) query += $"WHERE UserId ='{userId}'";
-            return _db.FavoriteList.FromSqlRaw(query).ToList();
-
+            var favList = new List<RealState>();
+            var fav = _db.FavoriteList.Where(x => x.UserId==userId).Include(real=> real.RealState);
+            // return _db.FavoriteList.FromSqlRaw(query).ToList();
+            foreach (var item in fav)
+            {
+                favList.Add(item.RealState);
+            }
+            return favList;
         }
         public void Update(RealState obj)
         {
