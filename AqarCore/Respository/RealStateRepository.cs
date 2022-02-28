@@ -9,8 +9,17 @@ namespace DataAccess.Respository
         {
             _db = db;
         }
-       
 
+        public async Task<IEnumerable<RealState>> GetAll()
+        {
+            return await _db.RealStates.OrderBy(real => real.Title).Include(real => real.Category).Include(real=> real.ApplicationUser).ToListAsync();
+
+        }
+
+        public async Task<RealState> GetById(Expression<Func<RealState, bool>> expression)
+        {
+            return await _db.RealStates.Include(real => real.Category).Include(real => real.ApplicationUser).FirstOrDefaultAsync(expression);
+        }
         public async Task<IEnumerable<RealState>> GetByStatus(string status)
         {
             return await _db.RealStates.Where(x => x.Status == status).ToListAsync();
@@ -41,16 +50,20 @@ namespace DataAccess.Respository
 
         }
 
-        public List<RealState> favoriteLists(string userId)
+        public List<RealState>? favoriteLists(string userId)
         {
             var favList = new List<RealState>();
-            var fav = _db.FavoriteList.Where(x => x.UserId==userId).Include(real=> real.RealState);
-            // return _db.FavoriteList.FromSqlRaw(query).ToList();
+            var fav = _db.FavoriteList?.Where(x => x.UserId==userId).Include(real=> real.RealState).ToList();
+            if(fav?.Count != 0)
+            {
             foreach (var item in fav)
             {
                 favList.Add(item.RealState);
             }
             return favList;
+
+            }
+            return null;
         }
         public void Update(RealState obj)
         {

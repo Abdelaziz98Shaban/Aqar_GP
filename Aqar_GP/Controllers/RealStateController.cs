@@ -197,8 +197,8 @@ namespace Aqar.controllers
 
         public IActionResult ShowFavourite(string UserId)
         { 
-            var result =  _unitOfWork.Realstate.favoriteLists(UserId);
-            if(result != null) return Ok(result);
+            var favrealState =  _unitOfWork.Realstate.favoriteLists(UserId);
+            if(favrealState != null) return Ok(favrealState);
 
             return BadRequest("No Favourites Added");
 

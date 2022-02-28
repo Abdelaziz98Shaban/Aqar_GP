@@ -16,12 +16,25 @@ namespace Aqar.Controllers
         [HttpGet("all")]
         public async Task<IActionResult> Index()
         {
-            var response = await _unitOfWork.Category.GetAllCategories();
+            var response = await _unitOfWork.Category.GetAll();
             if (response.Count() == 0) return BadRequest("Category List is Empty");
             return Ok(response);
         }
 
 
+        [HttpGet("details/{id}")]
+
+        public async Task<IActionResult> GetCategory(string id)
+        {
+            var cat = await _unitOfWork.Category.GetById(cat => cat.Id == id);
+            if (cat != null)
+            {
+                return Ok(cat);
+
+            }
+            return BadRequest("Category doesn't Exist");
+
+        }
 
         [HttpPost("add")]
         public IActionResult Create(Category category)
