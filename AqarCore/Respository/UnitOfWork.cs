@@ -1,11 +1,6 @@
-﻿
-
-using DataAccess.Data;
-using DataAccess.Helpers;
-using DataAccess.Respository.IRepository;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using Models;
+
 
 namespace DataAccess.Respository
 {

@@ -1,10 +1,4 @@
 ﻿
-using DataAccess.Data;
-using DataAccess.Respository.IRepository;
-using Microsoft.EntityFrameworkCore;
-using Models;
-using Models.viewModel;
-
 namespace DataAccess.Respository
 {
     public class RealStateRepository : Repository<RealState>, IRealstateRepository
@@ -40,9 +34,9 @@ namespace DataAccess.Respository
             if (prop.Baths is not null && prop.Baths != 0 ) query += $"AND Baths ='{prop.Baths}' ";
             if (prop.Floor is not null && prop.Floor != 0 ) query += $"AND Floor ='{prop.Floor}' ";
             if (prop.minPrice is not null && prop.minPrice != 0 && prop.maxPrice is not null && prop.maxPrice != 0) 
-                query += $"AND Area BETWEEN ${prop.minPrice} and ${prop.maxPrice} ";
+            query += $"AND Area BETWEEN ${prop.minPrice} and ${prop.maxPrice} ";
             if (prop.minArea is not null && prop.minArea != 0 && prop.maxArea is not null && prop.maxArea != 0)
-                query += $"AND Price BETWEEN ${prop.minArea} and ${prop.maxArea} ";
+            query += $"AND Price BETWEEN ${prop.minArea} and ${prop.maxArea} ";
             return await _db.RealStates.FromSqlRaw(query).ToListAsync();
 
         }

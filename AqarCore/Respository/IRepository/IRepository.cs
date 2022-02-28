@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-
+﻿
 namespace DataAccess.Respository.IRepository
 {
     public interface IRepository<T> where T : class

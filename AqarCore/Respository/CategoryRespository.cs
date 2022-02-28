@@ -1,8 +1,4 @@
 ﻿
-using DataAccess.Data;
-using Microsoft.EntityFrameworkCore;
-using Models;
-
 namespace DataAccess.Respository.IRepository
 {
    public class CategoryRespository : Repository<Category> , ICategoryRepository
