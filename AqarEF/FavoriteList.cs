@@ -1,8 +1,4 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
-
-
-namespace Models
+﻿namespace Models
 {
     public class FavoriteList
     {

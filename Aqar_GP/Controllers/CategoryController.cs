@@ -1,10 +1,4 @@
 ﻿
-using DataAccess.Respository.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using Models;
-using Microsoft.AspNetCore.Authorization;
-
 namespace Aqar.Controllers
 {
     [Route("api/[controller]")]
@@ -23,10 +17,7 @@ namespace Aqar.Controllers
         public async Task<IActionResult> Index()
         {
             var response = await _unitOfWork.Category.GetAllCategories();
-            if (response.Count() == 0)
-            {
-                return  BadRequest("Category List is Empty");
-            }
+            if (response.Count() == 0) return BadRequest("Category List is Empty");
             return Ok(response);
         }
 
@@ -35,19 +26,12 @@ namespace Aqar.Controllers
         [HttpPost("add")]
         public IActionResult Create(Category category)
         { 
-            //category.Id= Guid.NewGuid().ToString();
-            if (category is null)
-            {
-                return BadRequest("Could not Add Empty Category");
-            }
-           
+            if (category is null) return BadRequest("Could not Add Empty Category");
             if (ModelState.IsValid)
             {
                 _unitOfWork.Category.Add(category);
                 _unitOfWork.Save();
-                return Ok(category);
-
-            }
+                return Ok(category);}
 
             return BadRequest(ModelState);
         }
@@ -57,11 +41,7 @@ namespace Aqar.Controllers
         public IActionResult Edit(Category category, [FromRoute] string id)
         {
 
-            if (category is null)
-            {
-                return BadRequest("Please Enter Updated information");
-
-            }
+            if (category is null) return BadRequest("Please Enter Updated information");
             if (id == category.Id)
             {
                 if (ModelState.IsValid)
@@ -69,30 +49,19 @@ namespace Aqar.Controllers
                     _unitOfWork.Category.Update(category);
                     _unitOfWork.Save();
                     return Ok(category);
-
                 }
 
-            }
-            else
-            {
-                return NotFound($"No category was found with ID: {id}");
-
-            }
+            } else return NotFound($"No category was found with ID: {id}");
 
             return BadRequest(ModelState);
         }
 
-        //POST
+  
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var category = await _unitOfWork.Category.GetById(c => c.Id == id);
-            if (category == null)
-            {
-                return NotFound($"No category was found with ID: {id}");
-
-            }
-
+            if (category == null) return NotFound($"No category was found with ID: {id}");
             _unitOfWork.Category.Remove(category);
             _unitOfWork.Save();
             return Ok(category);

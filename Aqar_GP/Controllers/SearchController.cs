@@ -1,7 +1,4 @@
-﻿using DataAccess.Respository.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using Models;
-using Models.viewModel;
+﻿
 
 namespace Aqar_GP.Controllers
 {

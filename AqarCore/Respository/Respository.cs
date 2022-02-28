@@ -1,9 +1,4 @@
-﻿using DataAccess.Data;
-using DataAccess.Respository.IRepository;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Linq.Expressions;
-
+﻿
 namespace DataAccess.Respository
 {
     public class Repository<T> : IRepository.IRepository<T> where T : class

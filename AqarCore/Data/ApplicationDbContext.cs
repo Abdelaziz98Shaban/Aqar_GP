@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using Models;
 
 namespace DataAccess.Data
 {
@@ -12,7 +10,7 @@ namespace DataAccess.Data
         public DbSet<RealState>? RealStates { get; set; }
         public DbSet<Category>? Category { get; set; }
         public DbSet<Transactions>? Transactions { get; set; }
-        public DbSet<FavoriteList> FavoriteList { get; set;}
+        public DbSet<FavoriteList>? FavoriteList { get; set;}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

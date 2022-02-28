@@ -1,12 +1,9 @@
-﻿
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Models
+﻿namespace Models
 {
     public class Transactions
     {
 
-        //public string Id { get; set; }
+
         public DateTime Date { get; set; }
 
         [ForeignKey("RealState")]

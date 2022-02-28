@@ -1,14 +1,12 @@
-﻿using DataAccess.Data;
-using DataAccess.Respository.IRepository;
+﻿
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Models;
 using System.Security.Claims;
 using System.Text;
-using Models.viewModel;
-using DataAccess.Helpers;
+
+
 
 namespace DataAccess.Respository
 {
