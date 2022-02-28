@@ -16,7 +16,7 @@ namespace DataAccess.Respository.IRepository
         Task<IEnumerable<RealState>> GetByStatus(string status);
 
        Task<IEnumerable<RealState>> SearchByProp(RealStateSearchVM prop);
-        public List<FavoriteList> favoriteLists(string userId);
+        public List<RealState> favoriteLists(string userId);
 
 
     }

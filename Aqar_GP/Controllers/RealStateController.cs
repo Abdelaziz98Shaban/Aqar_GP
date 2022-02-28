@@ -29,15 +29,21 @@ namespace Aqar.controllers
             return Ok(response);
         }
 
-        [HttpGet("searchBystatus")]
-        public async Task<IActionResult> Status(string status)
+
+
+        [HttpGet("details")]
+
+        public async Task<IActionResult> GetRealState(string id)
         {
-            var response = await _unitOfWork.Realstate.GetByStatus(status);
-            if (response.Count() == 0) return BadRequest("RealState List is Empty");
-            return Ok(response);
+            var realstate = await _unitOfWork.Realstate.GetById(real=> real.Id == id);
+            if (realstate !=null)
+            {
+                return Ok(realstate);
+
+            }
+            return BadRequest("Realstate doesn't Exist");
+           
         }
-
-
 
 
 
@@ -184,22 +190,35 @@ namespace Aqar.controllers
         [HttpPost("AddFavorite")]
         public async Task<IActionResult> AddToFavorite(string RealStateId,string userID)
         {
-            FavoriteList List = new FavoriteList();
-            List.RealstateId = RealStateId;
-            List.UserId = userID;
-            List.Date = DateTime.UtcNow;
-            List.RealState = await _unitOfWork.Realstate.GetById(x => x.Id== RealStateId);
-            //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
-            _unitOfWork.FavoriteList.Add(List);
-            _unitOfWork.Save();
-            return Ok();
+            var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
+            var user = await _unitOfWork.Users.GetById(x => x.Id == userID);
+            if(user != null && reaState != null)
+            {
+                var favItem = await _unitOfWork.FavoriteList.GetById(x => x.RealstateId == RealStateId && x.UserId == userID);
+                if (favItem != null)
+                 return BadRequest("This RealState is Already in Favorites ");
+
+            FavoriteList fav = new FavoriteList();
+            fav.RealstateId = RealStateId;
+            fav.UserId = userID;
+            fav.Date = DateTime.UtcNow;
+            fav.RealState = reaState;
+
+                // var favUser = await _unitOfWork.FavoriteList.GetById(x => x.UserId == userID);
+                 _unitOfWork.FavoriteList.Add(fav);
+                  _unitOfWork.Save();
+                 return Ok(fav);
+            }
+            return BadRequest("SomeThing Went Wrong :( ");
+
         }
+        [HttpGet("getFavorite")]
 
         public IActionResult ShowFavourite(string UserId)
         {
 
            var result =  _unitOfWork.Realstate.favoriteLists(UserId);
-                if(result != null) return Ok(result);
+                if(result.Count !=0 ) return Ok(result);
                 return BadRequest("No Favourites Added");
             
         }
