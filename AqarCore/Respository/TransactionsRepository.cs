@@ -1,6 +1,4 @@
-﻿using DataAccess.Data;
-using Models;
-
+﻿
 namespace DataAccess.Respository.IRepository
 {
     public class TransactionsRepository : Repository<Transactions> , ITransactions 

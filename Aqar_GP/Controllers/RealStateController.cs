@@ -1,9 +1,4 @@
 ﻿
-using DataAccess.Respository.IRepository;
-
-using Microsoft.AspNetCore.Mvc;
-using Models;
-using Models.viewModel;
 
 namespace Aqar.controllers
 {
@@ -19,7 +14,6 @@ namespace Aqar.controllers
         {
             _unitOfWork = unitOfWork;
         }
-
 
         [HttpGet("all")]
         public async Task<IActionResult> Index()
@@ -37,10 +31,6 @@ namespace Aqar.controllers
             return Ok(response);
         }
 
-
-
-
-
         [HttpPost("add")]
         public async Task<IActionResult> CreateAsync([FromForm] RealStateVModel realVm)
         {
@@ -55,16 +45,12 @@ namespace Aqar.controllers
 
             var isValidGenre = await _unitOfWork.Category.IsvalidCategory(realVm.CategoryId);
 
-            if (!isValidGenre)
-                return BadRequest("Invalid genere ID!");
-            if (!ModelState.IsValid)
-            return BadRequest(ModelState);
-           
-
+            if (!isValidGenre) return BadRequest("Invalid genere ID!");
+               
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+       
             using var dataStream = new MemoryStream();
-
             await realVm.Image.CopyToAsync(dataStream);
-
             var newRealState = new RealState {
                 Title = realVm.Title,
                 Description = realVm.Description,
@@ -93,10 +79,6 @@ namespace Aqar.controllers
             return Ok(newRealState);
         }
 
-
-
-
-
         [HttpPut("update/{id}")]
         public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id)
         {
@@ -118,11 +100,7 @@ namespace Aqar.controllers
                 if (ModelState.IsValid)
                 {
                     using var dataStream = new MemoryStream();
-
                     await realVm.Image.CopyToAsync(dataStream);
-
-
-
                     real.Title = realVm.Title;
                     real.Description = realVm.Description;
                     real.Price = realVm.Price;
@@ -142,7 +120,6 @@ namespace Aqar.controllers
                     real.FirePlace = realVm.FirePlace;
                     real.CategoryId = realVm.CategoryId;
                     real.UserId = realVm.userId;
-                    
                     real.Image = dataStream.ToArray();
                     _unitOfWork.Realstate.Update(real);
                     _unitOfWork.Save();
@@ -173,8 +150,7 @@ namespace Aqar.controllers
             transaction.RealstateId = RealStateId;
             transaction.UserId = userID;
             transaction.Date = DateTime.UtcNow;
-            transaction.RealState = await _unitOfWork.Realstate.GetById(x => x.Id== RealStateId);
-            //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
+            transaction.RealState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
             _unitOfWork.Transactions.Add(transaction);
             _unitOfWork.Save();
             return Ok();
@@ -189,18 +165,19 @@ namespace Aqar.controllers
             List.UserId = userID;
             List.Date = DateTime.UtcNow;
             List.RealState = await _unitOfWork.Realstate.GetById(x => x.Id== RealStateId);
-            //transaction.ApplicationUser = await _unitOfWork.Realstate.GetById(x => int.Parse(x.Id) == RealStateId);
             _unitOfWork.FavoriteList.Add(List);
             _unitOfWork.Save();
             return Ok();
         }
 
         public IActionResult ShowFavourite(string UserId)
-        {
+        { 
+            var result =  _unitOfWork.Realstate.favoriteLists(UserId);
+            if(result != null) return Ok(result);
 
-           var result =  _unitOfWork.Realstate.favoriteLists(UserId);
-                if(result != null) return Ok(result);
-                return BadRequest("No Favourites Added");
+            return BadRequest("No Favourites Added");
+
+               
             
         }
        

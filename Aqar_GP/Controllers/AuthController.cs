@@ -1,8 +1,4 @@
-﻿using DataAccess.Respository.IRepository;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Models.viewModel;
-
+﻿
 namespace Aqar_GP.Controllers
 {
     [Route("api/[controller]")]
