@@ -51,11 +51,11 @@ namespace Aqar.controllers
                 return BadRequest("Only .png and .jpg images are allowed!");
 
             if (realVm.Image.Length > _maxAllowedPosterSize)
-                return BadRequest("Max allowed size for poster is 1MB!");
+                return BadRequest("Max allowed size for Image is 1MB!");
 
             var isValidGenre = await _unitOfWork.Category.IsvalidCategory(realVm.CategoryId);
 
-            if (!isValidGenre) return BadRequest("Invalid genere ID!");
+            if (!isValidGenre) return BadRequest("Invalid Cateory ID!");
                
             if (!ModelState.IsValid) return BadRequest(ModelState);
        
@@ -92,25 +92,30 @@ namespace Aqar.controllers
         [HttpPut("update/{id}")]
         public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id)
         {
-            if (realVm.Image == null)
-                return BadRequest("Poster is required!");
-
-            if (!_allowedExtenstions.Contains(Path.GetExtension(realVm.Image.FileName).ToLower()))
-                return BadRequest("Only .png and .jpg images are allowed!");
-
-            if (realVm.Image.Length > _maxAllowedPosterSize)
-                return BadRequest("Max allowed size for poster is 1MB!");
-
+           
 
             if (realVm is null) return BadRequest("Please Enter Updated information");
+            var isValidGenre = await _unitOfWork.Category.IsvalidCategory(realVm.CategoryId);
+
+            if (!isValidGenre) return BadRequest("Invalid Cateory ID!");
 
             var real = await _unitOfWork.Realstate.GetById(real=>real.Id == id);
             if (real is not null)
             {
                 if (ModelState.IsValid)
                 {
-                    using var dataStream = new MemoryStream();
-                    await realVm.Image.CopyToAsync(dataStream);
+                    if(realVm.Image !=null)
+                    {
+                        if (!_allowedExtenstions.Contains(Path.GetExtension(realVm.Image.FileName).ToLower()))
+                            return BadRequest("Only .png and .jpg images are allowed!");
+
+                        if (realVm.Image.Length > _maxAllowedPosterSize)
+                            return BadRequest("Max allowed size for Image is 1MB!");
+
+                        using var dataStream = new MemoryStream();
+                        await realVm.Image.CopyToAsync(dataStream);
+                        real.Image = dataStream.ToArray();
+                    }
                     real.Title = realVm.Title;
                     real.Description = realVm.Description;
                     real.Price = realVm.Price;
@@ -130,7 +135,6 @@ namespace Aqar.controllers
                     real.FirePlace = realVm.FirePlace;
                     real.CategoryId = realVm.CategoryId;
                     real.UserId = realVm.userId;
-                    real.Image = dataStream.ToArray();
                     _unitOfWork.Realstate.Update(real);
                     _unitOfWork.Save();
                     return Ok(real);
