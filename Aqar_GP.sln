@@ -5,9 +5,9 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aqar_GP", "Aqar_GP\Aqar_GP.csproj", "{BA5E1EC0-AC7D-4FC5-AA1E-C2D9EF7E6171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "AqarCore\DataAccess.csproj", "{B3A4896E-7A23-42C2-BC00-DDA9F94D909E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "AqarCore\DataAccess.csproj", "{B3A4896E-7A23-42C2-BC00-DDA9F94D909E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "AqarEF\Models.csproj", "{7E6592BD-A0ED-48F9-8221-C42C1C50C847}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "AqarEF\Models.csproj", "{7E6592BD-A0ED-48F9-8221-C42C1C50C847}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

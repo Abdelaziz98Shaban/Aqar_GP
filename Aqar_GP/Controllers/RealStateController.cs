@@ -19,8 +19,9 @@ namespace Aqar.controllers
         public async Task<IActionResult> Index()
         {
             var response = await _unitOfWork.Realstate.GetAll();
-            if (response.Count() == 0) return BadRequest("RealState List is Empty");
-            return Ok(response);
+            
+            if (response.Count() == 0) return BadRequest(new { message = "Empty list"});
+            return Ok("test");
         }
 
 
