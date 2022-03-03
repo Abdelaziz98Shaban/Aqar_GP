@@ -14,14 +14,13 @@ namespace Aqar.controllers
         {
             _unitOfWork = unitOfWork;
         }
-
         [HttpGet("all")]
         public async Task<IActionResult> Index()
         {
             var response = await _unitOfWork.Realstate.GetAll();
             
             if (response.Count() == 0) return BadRequest(new { message = "Empty list"});
-            return Ok("test");
+            return Ok(response);
         }
 
 
@@ -41,7 +40,7 @@ namespace Aqar.controllers
         }
 
 
-
+        [Authorize]
         [HttpPost("add")]
         public async Task<IActionResult> CreateAsync([FromForm] RealStateVModel realVm)
         {
@@ -90,6 +89,7 @@ namespace Aqar.controllers
             return Ok(newRealState);
         }
 
+        [Authorize]
         [HttpPut("update/{id}")]
         public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id)
         {
@@ -101,6 +101,7 @@ namespace Aqar.controllers
             if (!isValidGenre) return BadRequest("Invalid Cateory ID!");
 
             var real = await _unitOfWork.Realstate.GetById(real=>real.Id == id);
+            var user = await _unitOfWork.Users.GetById(user=> user.Id == id);
             if (real is not null)
             {
                 if (ModelState.IsValid)
@@ -147,7 +148,7 @@ namespace Aqar.controllers
             return BadRequest(ModelState);
         }
 
-
+        [Authorize]
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
@@ -157,7 +158,7 @@ namespace Aqar.controllers
             _unitOfWork.Save();
             return Ok(realState);
         }
-
+        [Authorize]
         [HttpPost("AddTransaction")]
         public async Task<IActionResult> ContactOwner(string RealStateId,string userID)
         {
@@ -171,7 +172,8 @@ namespace Aqar.controllers
             return Ok();
 
 
-        }      
+        }
+        [Authorize]
         [HttpPost("AddFavorite")]
         public async Task<IActionResult> AddToFavorite(string RealStateId,string userID)
         {
@@ -197,11 +199,10 @@ namespace Aqar.controllers
             return BadRequest("SomeThing Went Wrong :( ");
 
 
-        }       
-//        /{RealStateId
-//    }/{userID
-//}
-[HttpDelete("DeleteFavorite")]
+        }
+       
+        [Authorize]
+        [HttpDelete("DeleteFavorite")]
         public async Task<IActionResult> DeleteFromFavorite(string RealStateId,string userID)
         {
             var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
@@ -220,8 +221,8 @@ namespace Aqar.controllers
 
 
         }
+        [Authorize]
         [HttpGet("getFavorite")]
-
         public IActionResult ShowFavourite(string UserId)
         { 
             var favrealState =  _unitOfWork.Realstate.favoriteLists(UserId);

@@ -13,6 +13,7 @@ namespace Aqar_GP.Controllers
         }
         [HttpPost("Update")]
 
+        [Authorize]
         public async Task <IActionResult> Update(string Id, RegisterViewModel Model)
         {
             if (Model == null) return BadRequest("Please Enter valid information");
