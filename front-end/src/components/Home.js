@@ -29,7 +29,7 @@ const Home = () => {
             fontSize={useBreakpointValue({ base: "3xl", md: "5xl" })}
           >
             Whether you’re buying, selling or renting, we can help you settle to
-            your perfect home.
+            your perfect home.s
           </Text>
         </Stack>
       </VStack>
