@@ -196,6 +196,28 @@ namespace Aqar.controllers
             return BadRequest("SomeThing Went Wrong :( ");
 
 
+        }       
+//        /{RealStateId
+//    }/{userID
+//}
+[HttpDelete("DeleteFavorite")]
+        public async Task<IActionResult> DeleteFromFavorite(string RealStateId,string userID)
+        {
+            var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
+            var user = await _unitOfWork.Users.GetById(x => x.Id == userID);
+            if(user != null && reaState != null)
+            {
+                var favItem = await _unitOfWork.FavoriteList.GetById(x => x.RealstateId == RealStateId && x.UserId == userID);
+                if (favItem == null)
+                 return BadRequest("This RealState doesen't exist in favorite list ");
+
+                _unitOfWork.FavoriteList.Remove(favItem);
+                  _unitOfWork.Save();
+                 return Ok(favItem);
+            }
+            return BadRequest("SomeThing Went Wrong :( ");
+
+
         }
         [HttpGet("getFavorite")]
 
