@@ -20,7 +20,7 @@ namespace Aqar.controllers
         {
             var response = await _unitOfWork.Realstate.GetAll();
             
-            if (response.Count() == 0) return BadRequest(new { message = "Empty list"});
+            if (response.Count() == 0) return NoContent();
             return Ok(response);
         }
 
@@ -36,7 +36,7 @@ namespace Aqar.controllers
                 return Ok(realstate);
 
             }
-            return BadRequest("Realstate doesn't Exist");
+            return NoContent();
            
         }
         
@@ -50,7 +50,7 @@ namespace Aqar.controllers
                 return Ok(realstate);
 
             }
-            return BadRequest("Realstate doesn't Exist");
+            return NoContent();
            
         }
 
@@ -202,7 +202,7 @@ namespace Aqar.controllers
             {
                 var favItem = await _unitOfWork.FavoriteList.GetById(x => x.RealstateId == RealStateId && x.UserId == userID);
                 if (favItem != null)
-                 return BadRequest("This RealState is Already in Favorites ");
+                 return BadRequest("This RealState is Already in Favorites");
 
             FavoriteList fav = new FavoriteList();
             fav.RealstateId = RealStateId;
@@ -210,7 +210,7 @@ namespace Aqar.controllers
             fav.Date = DateTime.UtcNow;
             fav.RealState = reaState;
 
-                // var favUser = await _unitOfWork.FavoriteList.GetById(x => x.UserId == userID);
+               
                  _unitOfWork.FavoriteList.Add(fav);
                   _unitOfWork.Save();
                  return Ok(fav);
@@ -251,7 +251,7 @@ namespace Aqar.controllers
 
            var result =  _unitOfWork.Realstate.favoriteLists(UserId);
                 if(result.Count !=0 ) return Ok(result);
-                return BadRequest("No Favourites Added");
+                return NoContent();
 
             
         }
