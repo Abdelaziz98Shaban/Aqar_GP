@@ -30,7 +30,7 @@ export const {
   propertiesReceived,
   propertiesRequestedFailed,
 } = slice.actions;
-
+console.log(propertiesReceived());
 export default slice.reducer;
 
 // Action Creators
