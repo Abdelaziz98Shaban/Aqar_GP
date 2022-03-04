@@ -20,7 +20,7 @@ import MobileNav from "./MobileNav";
 const Links = [
   { path: "/", content: "Home" },
   { path: "/search", content: "Search" },
-  { path: "/property", content: "Properties" },
+  { path: "/properties", content: "Properties" },
 ];
 
 const NavBar = () => {
