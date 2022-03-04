@@ -4,7 +4,7 @@ import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 
 const MobileNav = ({ items, colorMode, toggleColorMode }) => {
   return (
-    <Stack spacing={4} pb={4} display={{ sm: "none" }} direction={["column"]}>
+    <Stack spacing={4} pb={4} display={{ md: "none" }} direction={["column"]}>
       <Flex
         h='1rem'
         px={2}
