@@ -15,6 +15,7 @@ namespace Aqar.controllers
             _unitOfWork = unitOfWork;
         }
         [HttpGet("all")]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var response = await _unitOfWork.Realstate.GetAll();
