@@ -30,7 +30,14 @@ const api =
       // General
       dispatch(actions.apiCallFailed(error.message));
       // Specific
-      if (onError) dispatch({ type: onError, payload: error.message });
+      if (onError)
+        dispatch({
+          type: onError,
+          payload:
+            error.response && error.response.data.message
+              ? error.response.data.message
+              : error.message,
+        });
     }
   };
 

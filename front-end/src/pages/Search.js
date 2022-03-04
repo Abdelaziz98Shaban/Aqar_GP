@@ -10,14 +10,21 @@ import {
 import { BsFilter } from "react-icons/bs";
 
 import SearchFilters from "../components/SearchFilters";
+import Property from "../components/Property";
 
 import noresult from "../assets/images/noresult.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { loadSearchList } from "../redux/search";
 
 const Search = () => {
   const [searchFilters, setSearchFilters] = useState(false);
-  const properties = [];
-  useEffect(() => {});
+  // form store ya asem
+  const { list: properties } = useSelector(state => state.entities.search);
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadSearchList());
+  }, [dispatch]);
   return (
     <Box>
       <Flex
@@ -39,9 +46,13 @@ const Search = () => {
       {searchFilters && <SearchFilters />}
       <Text fontSize='2xl' p='4' fontWeight='bold'>
         Properties
-        {/* {router.query.purpose} */}
       </Text>
-      {/* TDD: Map for propertyList */}
+      {/* Load list of properties */}
+      <Flex flexWrap='wrap'>
+        {properties.map(property => (
+          <Property property={property} key={property.id} />
+        ))}
+      </Flex>
       {properties.length === 0 && (
         <Flex
           justifyContent='center'
