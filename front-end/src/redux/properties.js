@@ -4,38 +4,56 @@ import { apiCallBegan } from "./api";
 
 import moment from "moment";
 
-const initialState = { list: [], loading: false, lastFetch: null };
+const initialState = {
+  propertiesForSale: [],
+  propertiesForRent: [],
+  loading: false,
+  lastFetch: null,
+};
 
 const slice = createSlice({
   name: "properties",
   initialState,
   reducers: {
-    // actions => action handlers
-    propertiesRequested: properties => {
+    propertiesForSaleRequested: properties => {
       properties.loading = true;
     },
-    propertiesReceived: (properties, action) => {
-      properties.list = action.payload;
+    propertiesForSaleReceived: (properties, action) => {
+      properties.propertiesForSale = action.payload;
       properties.loading = false;
       properties.lastFetch = Date.now();
     },
-    propertiesRequestedFailed: properties => {
+    propertiesForSaleRequestedFailed: properties => {
+      properties.loading = false;
+    },
+    propertiesForRentRequested: properties => {
+      properties.loading = true;
+    },
+    propertiesForRentReceived: (properties, action) => {
+      properties.propertiesForRent = action.payload;
+      properties.loading = false;
+      properties.lastFetch = Date.now();
+    },
+    propertiesForRentRequestedFailed: properties => {
       properties.loading = false;
     },
   },
 });
 
 export const {
-  propertiesRequested,
-  propertiesReceived,
-  propertiesRequestedFailed,
+  propertiesForSaleRequested,
+  propertiesForSaleReceived,
+  propertiesForSaleRequestedFailed,
+  propertiesForRentRequested,
+  propertiesForRentReceived,
+  propertiesForRentRequestedFailed,
 } = slice.actions;
 export default slice.reducer;
 
 // Action Creators
-const url = "/Realstate/all";
+const url = "/Search";
 
-export const loadProperties = () => (dispatch, getState) => {
+export const loadpropertiesForSale = () => (dispatch, getState) => {
   const { lastFetch } = getState().entities.properties;
 
   const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
@@ -43,9 +61,31 @@ export const loadProperties = () => (dispatch, getState) => {
   return dispatch(
     apiCallBegan({
       url,
-      onStart: propertiesRequested.type,
-      onSuccess: propertiesReceived.type,
-      onError: propertiesRequestedFailed.type,
+      method: "POST",
+      data: {
+        Status: "sale",
+      },
+      onStart: propertiesForSaleRequested.type,
+      onSuccess: propertiesForSaleReceived.type,
+      onError: propertiesForSaleRequestedFailed.type,
+    })
+  );
+};
+export const loadpropertiesForRent = () => (dispatch, getState) => {
+  const { lastFetch } = getState().entities.properties;
+
+  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  if (diffInMinutes < 10) return;
+  return dispatch(
+    apiCallBegan({
+      url,
+      method: "POST",
+      data: {
+        Status: "rent",
+      },
+      onStart: propertiesForRentRequested.type,
+      onSuccess: propertiesForRentReceived.type,
+      onError: propertiesForRentRequestedFailed.type,
     })
   );
 };

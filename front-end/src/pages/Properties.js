@@ -7,15 +7,20 @@ import { useDispatch, useSelector } from "react-redux";
 import Banner from "../components/Banner";
 import Property from "../components/Property";
 
-import { loadProperties } from "../redux/properties";
+import {
+  loadpropertiesForSale,
+  loadpropertiesForRent,
+} from "../redux/properties";
+import NoResult from "../components/common/NoResult";
 
 const Properties = () => {
-  const propertiesForRent = useSelector(
-    state => state.entities.properties.list
+  const { propertiesForRent, propertiesForSale } = useSelector(
+    state => state.entities.properties
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadProperties());
+    dispatch(loadpropertiesForRent());
+    dispatch(loadpropertiesForSale());
   }, [dispatch]);
   return (
     <Box>
@@ -30,7 +35,7 @@ const Properties = () => {
         imageUrl='https://bayut-production.s3.eu-central-1.amazonaws.com/image/145426814/33973352624c48628e41f2ec460faba4'
       />
       <Flex flexWrap='wrap' justifyContent='center'>
-        {propertiesForRent.map(property => (
+        {propertiesForSale.map(property => (
           <Property property={property} key={property.id} />
         ))}
       </Flex>
@@ -44,6 +49,12 @@ const Properties = () => {
         linkName='/search?purpose=for-sale'
         imageUrl='https://bayut-production.s3.eu-central-1.amazonaws.com/image/110993385/6a070e8e1bae4f7d8c1429bc303d2008'
       />
+      <Flex flexWrap='wrap' justifyContent='center'>
+        {propertiesForRent.map(property => (
+          <Property property={property} key={property.id} />
+        ))}
+      </Flex>
+      <NoResult count={propertiesForRent.length} />
     </Box>
   );
 };
