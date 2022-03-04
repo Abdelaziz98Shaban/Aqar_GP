@@ -38,6 +38,20 @@ namespace Aqar.controllers
             return BadRequest("Realstate doesn't Exist");
            
         }
+        
+        [HttpGet("myrealStates/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetMyRealState([FromRoute] string userId)
+        {
+            var realstate = await _unitOfWork.Realstate.GetById(real=> real.UserId == userId);
+            if (realstate !=null)
+            {
+                return Ok(realstate);
+
+            }
+            return BadRequest("Realstate doesn't Exist");
+           
+        }
 
 
         [Authorize]
@@ -90,8 +104,8 @@ namespace Aqar.controllers
         }
 
         [Authorize]
-        [HttpPut("update/{id}")]
-        public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id)
+        [HttpPut("update/{id}/{userId}")]
+        public async  Task<IActionResult> Edit([FromForm] RealStateVModel realVm, [FromRoute] string id,[FromRoute] string userId)
         {
            
 
@@ -101,8 +115,8 @@ namespace Aqar.controllers
             if (!isValidGenre) return BadRequest("Invalid Cateory ID!");
 
             var real = await _unitOfWork.Realstate.GetById(real=>real.Id == id);
-            var user = await _unitOfWork.Users.GetById(user=> user.Id == id);
-            if (real is not null)
+            var user = await _unitOfWork.Realstate.GetById(real => real.UserId == userId);
+            if (real is not null && user is not null)
             {
                 if (ModelState.IsValid)
                 {
@@ -149,18 +163,22 @@ namespace Aqar.controllers
         }
 
         [Authorize]
-        [HttpDelete("delete/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        [HttpDelete("delete/{id}/{userId}")]
+        public async Task<IActionResult> Delete([FromRoute]  string id, [FromRoute]  string userId)
         {
             var realState = await _unitOfWork.Realstate.GetById(realState => realState.Id == id);
-            if (realState == null) return NotFound($"No RealState was found with ID: {id}");
-            _unitOfWork.Realstate.Remove(realState);
-            _unitOfWork.Save();
-            return Ok(realState);
+            var user = await _unitOfWork.Realstate.GetById(realState => realState.UserId == userId);
+            if (realState is not null && user is not null)
+            {
+                _unitOfWork.Realstate.Remove(realState);
+                _unitOfWork.Save();
+                return Ok(realState);
+            }
+            return NotFound($"No RealState was found with ID: {id}");
         }
         [Authorize]
         [HttpPost("AddTransaction")]
-        public async Task<IActionResult> ContactOwner(string RealStateId,string userID)
+        public async Task<IActionResult> ContactOwner([FromRoute] string RealStateId, [FromRoute] string userID)
         {
             Transactions transaction = new Transactions();
             transaction.RealstateId = RealStateId;
@@ -175,7 +193,7 @@ namespace Aqar.controllers
         }
         [Authorize]
         [HttpPost("AddFavorite/{RealStateId}/{userID}")]
-        public async Task<IActionResult> AddToFavorite(string RealStateId,string userID)
+        public async Task<IActionResult> AddToFavorite([FromRoute] string RealStateId, [FromRoute] string userID)
         {
             var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
             var user = await _unitOfWork.Users.GetById(x => x.Id == userID);
@@ -203,7 +221,7 @@ namespace Aqar.controllers
        
         [Authorize]
         [HttpDelete("DeleteFavorite")]
-        public async Task<IActionResult> DeleteFromFavorite(string RealStateId,string userID)
+        public async Task<IActionResult> DeleteFromFavorite([FromRoute] string RealStateId, [FromRoute] string userID)
         {
             var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
             var user = await _unitOfWork.Users.GetById(x => x.Id == userID);
@@ -223,7 +241,7 @@ namespace Aqar.controllers
         }
         [Authorize]
         [HttpGet("getFavorite")]
-        public IActionResult ShowFavourite(string UserId)
+        public IActionResult ShowFavourite([FromRoute] string UserId)
         { 
             var favrealState =  _unitOfWork.Realstate.favoriteLists(UserId);
             if(favrealState != null) return Ok(favrealState);
