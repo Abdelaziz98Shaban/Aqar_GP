@@ -15,6 +15,7 @@
     "framer-motion": "^6.2.8",
     "http-proxy-middleware": "^2.0.3",
     "jest-editor-support": "^30.0.2",
+    "lodash": "^4.17.21",
     "millify": "^4.0.0",
     "moment": "^2.29.1",
     "react": "^17.0.2",
