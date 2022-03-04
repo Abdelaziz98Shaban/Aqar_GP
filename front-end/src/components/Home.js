@@ -4,9 +4,19 @@ import {
   Text,
   VStack,
   useBreakpointValue,
+  Button,
 } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadProperties } from "../redux/properties";
 
 const Home = () => {
+  // const list = useSelector(state => state.entities.properties.list);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(loadProperties());
+  }, [dispatch]);
+
   return (
     <Flex
       w={"full"}
