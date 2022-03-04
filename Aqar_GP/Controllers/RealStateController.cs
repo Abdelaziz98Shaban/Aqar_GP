@@ -25,7 +25,7 @@ namespace Aqar.controllers
 
 
 
-        [HttpGet("details")]
+        [HttpGet("details/{id}")]
 
         public async Task<IActionResult> GetRealState(string id)
         {
@@ -174,7 +174,7 @@ namespace Aqar.controllers
 
         }
         [Authorize]
-        [HttpPost("AddFavorite")]
+        [HttpPost("AddFavorite/{RealStateId}/{userID}")]
         public async Task<IActionResult> AddToFavorite(string RealStateId,string userID)
         {
             var reaState = await _unitOfWork.Realstate.GetById(x => x.Id == RealStateId);
