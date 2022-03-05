@@ -4,6 +4,9 @@ import NavBar from "./components/NavBar/NavBar";
 import Home from "./pages/Home";
 import Properties from "./pages/Properties";
 import Search from "./pages/Search";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
+
 function App() {
   return (
     <>
@@ -12,6 +15,8 @@ function App() {
         <Route exact path='/' element={<Home />} />
         <Route path='/properties' element={<Properties />} />
         <Route path='/search' element={<Search />} />
+        <Route path='/signin' element={<Signin />} />
+        <Route path='/signup' element={<Signup />} />
       </Routes>
     </>
   );
