@@ -17,7 +17,7 @@ namespace Aqar.Controllers
         public async Task<IActionResult> Index()
         {
             var response = await _unitOfWork.Category.GetAll();
-            if (response.Count() == 0) return BadRequest("Category List is Empty");
+            if (response.Count() == 0) return NoContent();
             return Ok(response);
         }
 
@@ -32,7 +32,7 @@ namespace Aqar.Controllers
                 return Ok(cat);
 
             }
-            return BadRequest("Category doesn't Exist");
+            return NoContent();
 
         }
 

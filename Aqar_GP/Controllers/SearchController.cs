@@ -16,10 +16,7 @@ namespace Aqar_GP.Controllers
         public async Task<IActionResult> Search(RealStateSearchVM param)
         {
             var result = await _unitOfWork.Realstate.SearchByProp(param);
-            if(result.Count() == 0)
-            {
-                return NotFound("no result found");
-            }
+           
             return Ok(result);
         }
 
