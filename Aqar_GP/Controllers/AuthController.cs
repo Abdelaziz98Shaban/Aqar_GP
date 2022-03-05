@@ -99,7 +99,7 @@ namespace Aqar_GP.Controllers
                 HttpOnly = true,
                 Expires = expires.ToLocalTime()
             };
-
+            if(refreshToken is not null)
             Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
         }
     }
