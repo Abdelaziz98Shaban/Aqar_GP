@@ -8,8 +8,8 @@
         [Required(ErrorMessage = "Name Is Required"), 
             Display(Name = "Name"), 
             MaxLength(100), 
-            RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
-            ErrorMessage = "Name must be char only and more than 2 characters")]
+            RegularExpression(pattern: @"{3,}",
+            ErrorMessage = "Name must be more than 2 characters")]
         public string Title { get; set; }
 
         public byte[] Image { get; set; }
@@ -17,8 +17,8 @@
         [Required(ErrorMessage = "Description Is Required"),
             Display(Name = "Description"),
             StringLength(300),
-            RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
-            ErrorMessage = "Description must be char only and more than 5 characters")]
+            RegularExpression(pattern: @"{3,}",
+            ErrorMessage = "Description must be more than 5 characters")]
         public string Description { get; set;}
         
         [Required(ErrorMessage = "Price Is Required"),
