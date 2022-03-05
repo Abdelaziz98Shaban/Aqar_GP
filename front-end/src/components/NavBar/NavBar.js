@@ -17,6 +17,8 @@ import MenuToggler from "./MenuToggler";
 import DesktopNav from "./DesktopNav";
 import MobileNav from "./MobileNav";
 
+import { useNavigate } from "react-router-dom";
+
 const Links = [
   { path: "/", content: "Home" },
   { path: "/search", content: "Search" },
@@ -26,6 +28,8 @@ const Links = [
 const NavBar = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -54,7 +58,7 @@ const NavBar = () => {
                 fontSize={"sm"}
                 fontWeight={400}
                 variant={"link"}
-                onClick={() => console.log("Sign in")}
+                onClick={() => navigate("/signin", { replace: true })}
               >
                 Sign In
               </Button>
@@ -64,7 +68,7 @@ const NavBar = () => {
                 fontWeight={600}
                 color={"white"}
                 bg={"teal.400"}
-                onClick={() => console.log("Sign Up")}
+                onClick={() => navigate("/signup", { replace: true })}
                 _hover={{
                   bg: "teal.300",
                 }}

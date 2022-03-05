@@ -34,8 +34,8 @@ const api =
         dispatch({
           type: onError,
           payload:
-            error.response && error.response.data.message
-              ? error.response.data.message
+            error.response && error.response.data
+              ? error.response.data
               : error.message,
         });
     }
