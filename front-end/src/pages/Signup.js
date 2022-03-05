@@ -34,7 +34,6 @@ export default function Signup() {
     const enteredAccount = { ...account };
     enteredAccount[input.name] = input.value;
     setAccount(enteredAccount);
-    console.log(account);
   };
 
   return (
