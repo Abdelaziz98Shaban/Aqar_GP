@@ -6,12 +6,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Banner from "../components/Banner";
 import Property from "../components/Property";
+import { useColorModeValue } from "@chakra-ui/react";
 
 import {
   loadpropertiesForSale,
   loadpropertiesForRent,
 } from "../redux/properties";
 import NoResult from "../components/common/NoResult";
+import AddProduct from "../components/AddProduct";
+
 
 const Properties = () => {
   const { propertiesForRent, propertiesForSale } = useSelector(
@@ -25,6 +28,7 @@ const Properties = () => {
   return (
     <Box>
       <Banner
+        
         purpose='RENT A HOME'
         title1='Rental Homes for'
         title2='Everyone'
