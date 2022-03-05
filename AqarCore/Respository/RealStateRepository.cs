@@ -10,7 +10,15 @@ namespace DataAccess.Respository
             _db = db;
         }
 
-     
+        public async Task<IEnumerable<RealState>> GetAll()
+        {
+            return await _db.RealStates.Include(real=>real.ApplicationUser).Include(real=>real.Category).ToListAsync();
+
+        }
+        public async Task<RealState> GetById(Expression<Func<RealState, bool>> expression)
+        {
+            return await _db.RealStates.Include(real => real.ApplicationUser).Include(real => real.Category).FirstOrDefaultAsync(expression);
+        }
         public async Task<IEnumerable<RealState>> GetByStatus(string status)
         {
             return await _db.RealStates.Where(x => x.Status == status).ToListAsync();

@@ -5,7 +5,7 @@ namespace Models
     {
         public Category()
         {
-            RealStates = new HashSet<RealState>();
+           // RealStates = new HashSet<RealState>();
         }
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string? Id { get; set; }
@@ -15,7 +15,7 @@ namespace Models
                       ErrorMessage = "Name must be char only and more than 2 characters")]
         public string Name { get; set; }
 
-        public virtual ICollection<RealState> RealStates { get; set; }
+      //  public virtual ICollection<RealState> RealStates { get; set; }
 
     }
 }

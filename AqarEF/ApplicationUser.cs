@@ -8,7 +8,7 @@ namespace Models
 
         public ApplicationUser()
         {
-            RealStates = new HashSet<RealState>();
+           // RealStates = new HashSet<RealState>();
             
         }
         [Required(ErrorMessage = "First Name Is Required"), Display(Name = "First Name"), StringLength(50), RegularExpression(pattern: @"[a-zA-Z0-9\s]{3,}",
@@ -22,7 +22,7 @@ namespace Models
         public string Address { get; set; }
         [Required, DataType(DataType.PhoneNumber), RegularExpression(@"^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$", ErrorMessage = "Not a valid phone number")]
         public int MobileNumber { get; set; }
-        public virtual ICollection<RealState> RealStates { get; set; }
+    //    public virtual ICollection<RealState> RealStates { get; set; }
 
         public List<RefreshToken>? RefreshTokens { get; set; }
 
