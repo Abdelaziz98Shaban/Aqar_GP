@@ -24,6 +24,7 @@ const Search = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(loadSearchList());
+    console.log("search page");
   }, [dispatch]);
   return (
     <Box>
