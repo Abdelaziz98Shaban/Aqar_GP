@@ -60,7 +60,8 @@ namespace DataAccess.Respository
 
             return new AuthViewModel
             {
-                Email = user.Email,
+                Id = user.Id,
+               Email = user.Email,
                ExpiresOn = jwtSecurityToken.ValidTo,
                 IsAuthenticated = true,
                 Roles = new List<string> { "User" },
@@ -88,6 +89,7 @@ namespace DataAccess.Respository
             }
             var jwtSecurityToken = await CreateJwtToken(user);
             var rolesList = await _userManager.GetRolesAsync(user);
+            authModel.Id = user.Id;
             authModel.IsAuthenticated = true;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
             authModel.Email = user.Email;
@@ -187,6 +189,7 @@ namespace DataAccess.Respository
             await _userManager.UpdateAsync(user);
 
             var jwtToken = await CreateJwtToken(user);
+            authModel.Id = user.Id;
             authModel.IsAuthenticated = true;
             authModel.Token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
             authModel.Email = user.Email;
