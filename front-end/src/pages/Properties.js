@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import { Flex, Box } from "@chakra-ui/react";
+import { Flex, Box, Avatar, Text, Badge } from "@chakra-ui/react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -44,7 +44,13 @@ const Properties = () => {
         linkName='/search?purpose=for-sale'
         imageUrl='https://bayut-production.s3.eu-central-1.amazonaws.com/image/110993385/6a070e8e1bae4f7d8c1429bc303d2008'
       />
+       <Flex flexWrap='wrap' justifyContent='center'>
+        {propertiesForRent.map(property => (
+          <Property property={property} key={property.id} />
+        ))}
+      </Flex>
     </Box>
+    
   );
 };
 
