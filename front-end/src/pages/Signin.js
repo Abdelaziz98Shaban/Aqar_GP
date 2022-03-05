@@ -6,18 +6,15 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Checkbox,
   Stack,
-  Link,
   Button,
   Heading,
   useColorModeValue,
   Alert,
   AlertIcon,
   AlertTitle,
-  AlertDescription,
-  CloseButton,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../redux/auth";
 
@@ -92,8 +89,9 @@ export default function SignIn() {
                   align={"start"}
                   justify={"space-between"}
                 >
-                  <Checkbox>Remember me</Checkbox>
-                  <Link color={"blue.400"}>Forgot password?</Link>
+                  <Link to='/signup'>
+                    <Text color={"blue.400"}>Create New Account.</Text>
+                  </Link>
                 </Stack>
                 <Button
                   type='submit'

@@ -36,6 +36,25 @@ const authSlice = createSlice({
       auth.loading = false;
       auth.error = action.payload;
     },
+    registerRquest: auth => {
+      auth.loading = true;
+      auth.error = null;
+    },
+    registerReceived: (auth, action) => {
+      auth.isAuthenticated = action.payload.isAuthenticated;
+      auth.username = action.payload.username;
+      auth.email = action.payload.email;
+      auth.roles = action.payload.roles;
+      auth.token = action.payload.token;
+      auth.expiresOn = action.payload.expiresOn;
+      auth.refreshTokenExpiration = action.payload.refreshTokenExpiration;
+      auth.loading = false;
+      auth.error = null;
+    },
+    registerRequestedFailed: (auth, action) => {
+      auth.loading = false;
+      auth.error = action.payload;
+    },
     logoutRequest: auth => {
       auth.isAuthenticated = null;
       auth.username = null;
@@ -60,6 +79,9 @@ export const {
   loginRequestedFailed,
   logoutRequest,
   logoutRequestFailed,
+  registerRquest,
+  registerReceived,
+  registerRequestedFailed,
 } = authSlice.actions;
 
 export default authSlice.reducer;
@@ -70,6 +92,20 @@ export const login = data => dispatch => {
   return dispatch(
     apiCallBegan({
       url: loginURL,
+      method: "POST",
+      data,
+      onStart: loginRquest.type,
+      onSuccess: loginReceived.type,
+      onError: loginRequestedFailed.type,
+    })
+  );
+};
+
+const registerURL = "/Auth/register";
+export const register = data => dispatch => {
+  return dispatch(
+    apiCallBegan({
+      url: registerURL,
       method: "POST",
       data,
       onStart: loginRquest.type,

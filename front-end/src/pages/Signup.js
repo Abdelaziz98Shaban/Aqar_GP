@@ -12,10 +12,17 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/auth";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = useState(false);
@@ -29,6 +36,14 @@ export default function Signup() {
     email: "",
     password: "",
   });
+
+  const { error } = useSelector(state => state.auth);
+  const dispatch = useDispatch();
+
+  const registerHandler = e => {
+    e.preventDefault();
+    dispatch(register(account));
+  };
 
   const inputChangeHandler = ({ currentTarget: input }) => {
     const enteredAccount = { ...account };
@@ -48,9 +63,12 @@ export default function Signup() {
           <Heading fontSize={"4xl"} textAlign={"center"}>
             Sign up
           </Heading>
-          {/* <Text fontSize={"lg"} color={"gray.600"}>
-            to enjoy all of our cool features ✌️
-          </Text> */}
+          {error && (
+            <Alert status='error'>
+              <AlertIcon />
+              <AlertTitle mr={2}>{error}</AlertTitle>
+            </Alert>
+          )}
         </Stack>
         <Box
           rounded={"lg"}
@@ -58,7 +76,7 @@ export default function Signup() {
           boxShadow={"lg"}
           p={8}
         >
-          <form>
+          <form onSubmit={registerHandler}>
             <Stack spacing={4}>
               <HStack>
                 <Box>
