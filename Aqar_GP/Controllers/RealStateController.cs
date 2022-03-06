@@ -47,7 +47,6 @@ namespace Aqar.controllers
         }
 
 
-        [Authorize]
         [HttpPost("add")]
         public async Task<IActionResult> CreateAsync([FromForm] RealStateVModel realVm)
         {
