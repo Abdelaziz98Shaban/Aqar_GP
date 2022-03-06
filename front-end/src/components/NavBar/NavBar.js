@@ -41,10 +41,14 @@ const NavBar = () => {
 
   const navigate = useNavigate();
 
-  const { isAuthenticated, email, token } = useSelector(state => state.auth);
+  const {
+    isAuthenticated,
+    email,
+    token,
+    roles: [role],
+  } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
-
   const logoutHandler = () => {
     dispatch(logoutRequest({ token }));
     navigate("/signin", { replace: true });
@@ -128,6 +132,9 @@ const NavBar = () => {
                     </Center>
                     <br />
                     <MenuDivider />
+                    <MenuItem onClick={() => navigate("/property/create")}>
+                      Create Real Estate
+                    </MenuItem>
                     <MenuItem onClick={logoutHandler}>Logout</MenuItem>
                   </MenuList>
                 </Menu>
