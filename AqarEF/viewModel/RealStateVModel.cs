@@ -11,7 +11,7 @@ namespace Models.viewModel
 
         public IFormFile Image { get; set; }
 
-        [Required(ErrorMessage = "Description Is Required")
+        [Required(ErrorMessage = "Description Is Required"),
             StringLength(300),
             ]
         public string Description { get; set; }
