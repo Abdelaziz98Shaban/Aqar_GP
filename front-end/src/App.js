@@ -29,7 +29,7 @@ import serialize from "form-serialize";
 import { createProperty } from "./redux/properties";
 
 const CreateProperty = () => {
-  const { id: userId } = useSelector(state => state.auth);
+  const { id: userId, token } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   const img = useRef();
@@ -43,7 +43,7 @@ const CreateProperty = () => {
     e.preventDefault();
     const enteredForm = serialize(e.target, { hash: true });
     const { name, files } = img.current;
-
+    console.log(enteredForm);
     const form_data = new FormData();
 
     for (var key in enteredForm) {
@@ -98,16 +98,12 @@ const CreateProperty = () => {
 
                 <FormControl>
                   <FormLabel>Description</FormLabel>
-                  <Input
-                    type='text'
-                    id='DescriptionDescription '
-                    name='Description '
-                  />
+                  <Input type='text' id='Description' name='Description' />
                 </FormControl>
 
                 <FormControl>
                   <FormLabel>VideoLink</FormLabel>
-                  <Input type='url' id='VideoLink' name='VideoLink' />
+                  <Input type='text' id='VideoLink' name='VideoLink' />
                 </FormControl>
                 <FormControl>
                   <FormLabel>Price</FormLabel>
@@ -122,17 +118,25 @@ const CreateProperty = () => {
                 <Stack direction={{ base: "column", md: "row" }}>
                   <FormControl>
                     <FormLabel>State</FormLabel>
-                    <Input type='text' id='State' name='State' />
+                    <Input
+                      type='text'
+                      id='Address.State'
+                      name='Address.State'
+                    />
                   </FormControl>
 
                   <FormControl>
                     <FormLabel>City</FormLabel>
-                    <Input type='text' id='City' name='City' />
+                    <Input type='text' id='Address.City' name='Address.City' />
                   </FormControl>
 
                   <FormControl>
                     <FormLabel>Street</FormLabel>
-                    <Input type='text' id='Street' name='Street' />
+                    <Input
+                      type='text'
+                      id='Address.Street'
+                      name='Address.Street'
+                    />
                   </FormControl>
                 </Stack>
 
@@ -175,14 +179,14 @@ const CreateProperty = () => {
 
                 <FormControl>
                   <FormLabel htmlFor='status'>Status</FormLabel>
-                  <Select id='status'>
+                  <Select id='Status' name='Status'>
                     <option value='rent'>Rent</option>
                     <option value='sale'>Buy</option>
                   </Select>
                 </FormControl>
                 <FormControl isRequired>
                   <FormLabel htmlFor='CategoryId'>Category</FormLabel>
-                  <Select id='CategoryId'>
+                  <Select id='CategoryId' name='CategoryId'>
                     {categoryList.map(item => (
                       <option value={item.value} key={item.value}>
                         {item.name}

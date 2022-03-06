@@ -59,14 +59,14 @@ const authSlice = createSlice({
       auth.error = action.payload;
     },
     logoutRequest: auth => {
-      auth.id = null;
-      auth.isAuthenticated = null;
-      auth.username = null;
-      auth.email = null;
-      auth.roles = null;
-      auth.token = null;
-      auth.expiresOn = null;
-      auth.refreshTokenExpiration = null;
+      auth.id = "";
+      auth.isAuthenticated = false;
+      auth.username = "";
+      auth.email = "";
+      auth.roles = [];
+      auth.token = "";
+      auth.expiresOn = "";
+      auth.refreshTokenExpiration = "";
       auth.loading = false;
       auth.error = null;
     },
