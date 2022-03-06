@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { apiCallBegan } from "./api";
 
 const initialState = {
+  id: null,
   isAuthenticated: false,
   username: "",
   email: "",
@@ -22,6 +23,7 @@ const authSlice = createSlice({
       auth.error = null;
     },
     loginReceived: (auth, action) => {
+      auth.id = action.payload.id;
       auth.isAuthenticated = action.payload.isAuthenticated;
       auth.username = action.payload.username;
       auth.email = action.payload.email;
@@ -41,6 +43,7 @@ const authSlice = createSlice({
       auth.error = null;
     },
     registerReceived: (auth, action) => {
+      auth.id = action.payload.id;
       auth.isAuthenticated = action.payload.isAuthenticated;
       auth.username = action.payload.username;
       auth.email = action.payload.email;
@@ -56,6 +59,7 @@ const authSlice = createSlice({
       auth.error = action.payload;
     },
     logoutRequest: auth => {
+      auth.id = null;
       auth.isAuthenticated = null;
       auth.username = null;
       auth.email = null;

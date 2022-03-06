@@ -7,8 +7,9 @@ import moment from "moment";
 const initialState = {
   propertiesForSale: [],
   propertiesForRent: [],
+  propertyCreated: null,
   loading: false,
-  lastFetch: null,
+  // lastFetch: null,
 };
 
 const slice = createSlice({
@@ -21,7 +22,7 @@ const slice = createSlice({
     propertiesForSaleReceived: (properties, action) => {
       properties.propertiesForSale = action.payload;
       properties.loading = false;
-      properties.lastFetch = Date.now();
+      // properties.lastFetch = Date.now();
     },
     propertiesForSaleRequestedFailed: properties => {
       properties.loading = false;
@@ -32,10 +33,16 @@ const slice = createSlice({
     propertiesForRentReceived: (properties, action) => {
       properties.propertiesForRent = action.payload;
       properties.loading = false;
-      properties.lastFetch = Date.now();
+      // properties.lastFetch = Date.now();
     },
     propertiesForRentRequestedFailed: properties => {
       properties.loading = false;
+    },
+    propertyCreated: (properties, action) => {
+      properties.propertyCreated = action.payload;
+    },
+    propertyRequestedFailed: (properties, action) => {
+      properties.error = action.payload;
     },
   },
 });
@@ -47,6 +54,8 @@ export const {
   propertiesForRentRequested,
   propertiesForRentReceived,
   propertiesForRentRequestedFailed,
+  propertyCreated,
+  propertyRequestedFailed,
 } = slice.actions;
 export default slice.reducer;
 
@@ -54,10 +63,10 @@ export default slice.reducer;
 const url = "/Search";
 
 export const loadpropertiesForSale = () => (dispatch, getState) => {
-  const { lastFetch } = getState().entities.properties;
+  // const { lastFetch } = getState().entities.properties;
 
-  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
-  if (diffInMinutes < 10) return;
+  // const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  // if (diffInMinutes < 10) return;
   return dispatch(
     apiCallBegan({
       url,
@@ -72,10 +81,10 @@ export const loadpropertiesForSale = () => (dispatch, getState) => {
   );
 };
 export const loadpropertiesForRent = () => (dispatch, getState) => {
-  const { lastFetch } = getState().entities.properties;
+  // const { lastFetch } = getState().entities.properties;
 
-  const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
-  if (diffInMinutes < 10) return;
+  // const diffInMinutes = moment().diff(moment(lastFetch), "minutes");
+  // if (diffInMinutes < 10) return;
   return dispatch(
     apiCallBegan({
       url,
@@ -86,6 +95,21 @@ export const loadpropertiesForRent = () => (dispatch, getState) => {
       onStart: propertiesForRentRequested.type,
       onSuccess: propertiesForRentReceived.type,
       onError: propertiesForRentRequestedFailed.type,
+    })
+  );
+};
+
+export const createProperty = data => dispatch => {
+  const headers = { "Content-Type": "multipart/form-data" };
+  return dispatch(
+    apiCallBegan({
+      url: "/Realstate/add",
+      method: "POST",
+      headers,
+      data,
+      // onStart: propertiesForRentRequested.type,
+      onSuccess: propertyCreated.type,
+      onError: propertyRequestedFailed.type,
     })
   );
 };
