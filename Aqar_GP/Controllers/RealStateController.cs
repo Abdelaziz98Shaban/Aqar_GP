@@ -30,11 +30,7 @@ namespace Aqar.controllers
         public async Task<IActionResult> GetRealState(string id)
         {
             var realstate = await _unitOfWork.Realstate.GetById(real=> real.Id == id);
-            if (realstate !=null)
-            {
-                return Ok(realstate);
-
-            }
+            if (realstate !=null) return Ok(realstate);
             return NoContent();
            
         }
@@ -44,11 +40,8 @@ namespace Aqar.controllers
         public async Task<IActionResult> GetMyRealState([FromRoute] string userId)
         {
             var realstate = await _unitOfWork.Realstate.GetById(real=> real.UserId == userId);
-            if (realstate !=null)
-            {
-                return Ok(realstate);
-
-            }
+            if (realstate !=null) return Ok(realstate);
+            
             return NoContent();
            
         }
